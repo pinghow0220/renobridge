@@ -1,0 +1,114 @@
+.navbar-frame {
+    margin-top: 10px;
+    border: 2px solid #417BBF;
+    border-radius: 5px;
+}
+
+.navbar-brand {
+    font-size: 1.8rem; 
+    font-weight: bold; 
+}
+
+.custom-spacing {
+    padding-top: 100px; 
+}
+
+.card-img-top {
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover;
+}
+
+  .project-img {
+    height: 250px; 
+    object-fit: cover;
+    width: 100%; 
+}
+
+.monitoring-section {
+    border-right: 1px solid #000;
+    padding-right: 20px;
+}
+.monitoring-visual {
+    height: 150px;
+    width: 150px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.line-chart {
+    height: 150px;
+    width: 150px;
+    border: 2px solid #000;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+}
+.line-chart div {
+    width: 10px;
+    background-color: #000;
+}
+
+.rating {
+    display: flex;
+    gap: 5px;
+}
+.rating i {
+    font-size: 24px;
+    cursor: pointer;
+    color: lightgray;
+}
+.rating i.active {
+    color: gold;
+}
+.review-box {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+.checkmark {
+    font-size: 64px;
+    display: block;
+    margin: 20px auto;
+}
+hr {
+    border: 0;
+    border-top: 1px solid black;
+    margin: 40px 0;
+}
+
+.form-section {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.profile-section {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    background-color: #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.rating {
+    font-size: 20px;
+}
+
+

@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Input</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+        <div class="container-fluid" style="background-color: white;">
+          <a class="navbar-brand" href="{% url 'renobridge' %}">Renobridge</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Experts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 border p-4 rounded shadow-lg">
+        <div class="container form-container">
+            <h3>Select your project preferences</h3>
+
+            <form id="ownerInputForm">
+                <!-- 1. Property Location -->
+                <div class="mb-3">
+                    <label for="location" class="form-label">1. Select the location of your property:</label>
+                    <select id="location" class="form-select">
+                        <option>Selangor</option>
+                        <option>Kuala Lumpur</option>
+                        <option>Penang</option>
+                        <option>Negeri Sembilan</option>
+                        <option>Sarawak</option>
+                        <option>Perak</option>
+                        <option>Malacca</option>
+                        <option>Kedah</option>
+                        <option>Sabah</option>
+                        <option>Johor</option>
+                        <option>Perlis</option>
+                        <option>Kelantan</option>
+                        <option>Pahang</option>
+                    </select>
+                </div>
+
+                <!-- 2. Property Type -->
+                <div class="mb-3">
+                    <label for="propertyType" class="form-label">2. Select the type of your property:</label>
+                    <select id="propertyType" class="form-select">
+                        <option>Apartment</option>
+                        <option>Condominium</option>
+                        <option>Terrace</option>
+                        <option>Semi-Detached</option>
+                        <option>Bungalow</option>
+                    </select>
+                </div>
+
+                <!-- 3. Property Size -->
+                <div class="mb-3">
+                    <label for="propertySize" class="form-label">3. Select the range of your property size (sqft):</label>
+                    <select id="propertySize" class="form-select">
+                        <option>500 - 1000 sqft</option>
+                        <option>1000 - 1500 sqft</option>
+                        <option>1500 - 2000 sqft</option>
+                        <option>2000 - 2500 sqft</option>
+                    </select>
+                </div>
+
+                <!-- 4. Preferred Style -->
+                <div class="mb-3">
+                    <label for="preferredStyle" class="form-label">4. Select the preferred style for your project:</label>
+                    <select id="preferredStyle" class="form-select">
+                        <option>Modern</option>
+                        <option>Minimalist</option>
+                        <option>Industrial</option>
+                        <option>Traditional</option>
+                    </select>
+                </div>
+
+                <!-- 5. Services -->
+                <div class="mb-3">
+                    <label class="form-label">5. Select services you require:</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service1" value="Smart Home Upgrades">
+                        <label class="form-check-label" for="service1">Smart Home Upgrades</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service2" value="Energy-efficient Upgrades">
+                        <label class="form-check-label" for="service2">Energy-efficient Upgrades</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service3" value="Full House Renovation">
+                        <label class="form-check-label" for="service3">Full House Renovation</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service4" value="Carpentry and Built-Ins">
+                        <label class="form-check-label" for="service4">Carpentry and Built-Ins</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service5" value="Electrical">
+                        <label class="form-check-label" for="service5">Electrical</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service6" value="Plumbing">
+                        <label class="form-check-label" for="service6">Plumbing</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service7" value="Painting and Wallpapering">
+                        <label class="form-check-label" for="service7">Painting and Wallpapering</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="service8" value="Other">
+                        <label class="form-check-label" for="service8">Other</label>
+                    </div>
+                </div>
+
+                <!-- 6. Budget -->
+                <div class="mb-3">
+                    <label for="budget" class="form-label">6. Select your budget for your project:</label>
+                    <select id="budget" class="form-select">
+                        <option>RM50,000 - RM100,000</option>
+                        <option>RM100,000 - RM200,000</option>
+                        <option>RM200,000 - RM300,000</option>
+                        <option>RM300,000 - RM500,000</option>
+                    </select>
+                </div>
+
+                <!-- 7. Duration -->
+                <div class="mb-3">
+                    <label for="duration" class="form-label">7. Select your expected duration for your project:</label>
+                    <select id="duration" class="form-select">
+                        <option>1 month</option>
+                        <option>2 months</option>
+                        <option>3 months</option>
+                        <option>6 months</option>
+                    </select>
+                </div>
+
+                <!-- 8. Upload files -->
+                <div class="mb-3">
+                    <label for="uploadFiles" class="form-label">8. Upload your floor plan, concept drawing, 3D designs if there is any:</label>
+                    <input type="file" id="uploadFiles" class="form-control">
+                    <button type="button" class="btn-upload">Upload</button>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('ownerInputForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Redirect the user to the expert_list.html page
+        window.location.href = "{% url 'expert_list' %}";
+    });
+</script>
+
+</body>
+</html>

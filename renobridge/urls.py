@@ -1,0 +1,23 @@
+from django.urls import path
+from . import views
+from .views import CustomLoginView 
+from django.contrib.auth import views as auth_views
+
+urlpatterns = [
+    path('renobridge/', views.renobridge, name='renobridge'),  # For index.html
+    path('dashboard/', views.dashboard, name='dashboard'),  # For dashboard.html
+    path('expert_list/', views.expert_list, name='expert_list'),  # For expert_list.html
+    path('expert_portfolio/', views.expert_portfolio, name='expert_portfolio'),  # For expert_portfolio.html
+    path('expert_profile/', views.expert_profile, name='expert_profile'),  # For expert_profile.html
+    path('experts_input/', views.experts_input, name='experts_input'),  # For experts_input.html
+    path('completion_page/', views.completion_page, name='completion_page'),  # For completion_page.html
+   
+    path('myfirst/', views.myfirst, name='myfirst'),  # For myfirst.html
+    path('owner_confirmation_list/', views.owner_confirmation_list, name='owner_confirmation_list'),  # For owner_confirmation_list.html
+    path('owner_input/', views.owner_input, name='owner_input'),  # For owner_input.html
+    path('register/', views.register, name='register'),  # For register.html
+    path('expert_invitation_list/',views.expert_invitation_list, name='expert_invitation_list'),
+    path('expert_dashboard/', views.expert_dashboard, name='expert_dashboard'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login/', CustomLoginView.as_view(template_name='login.html'), name='login'),
+]

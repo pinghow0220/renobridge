@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Monitoring</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+        <div class="container-fluid" style="background-color: white;">
+          <a class="navbar-brand" href="{% url 'renobridge' %}">Renobridge</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Experts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Project Expense Monitoring -->
+            <div class="col-md-6 monitoring-section">
+                <h4>Project Expense Monitoring</h4>
+                <div class="monitoring-visual">
+                    <!-- Placeholder for Pie Chart -->
+                    <span>&#9716;</span> <!-- Placeholder symbol for pie chart -->
+                </div>
+                <p><strong>Budget Allocated:</strong></p>
+                <p><strong>Expenses Spent:</strong></p>
+                <p><strong>Budget Remaining:</strong></p>
+                <p><strong>Expenses over Budget Percentage:</strong></p>
+            </div>
+
+            <!-- Project Timeline Monitoring -->
+            <div class="col-md-6">
+                <h4>Project Timeline Monitoring</h4>
+                <div class="line-chart">
+                    <!-- Placeholder for Line Chart -->
+                    <div style="height: 30px;"></div>
+                    <div style="height: 60px;"></div>
+                    <div style="height: 40px;"></div>
+                </div>
+                <p><strong>Total Expected Duration:</strong></p>
+                <p><strong>Duration Spent:</strong></p>
+                <p><strong>Remaining Duration:</strong></p>
+                <p><strong>Work Done Percentage:</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
