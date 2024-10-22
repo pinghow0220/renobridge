@@ -30,7 +30,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link" href="{% url 'expert_profile' request.user.id %}">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'expert_dashboard'%}">Dashboard</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link disabled" href="#">Invitation List</a>
@@ -39,6 +42,13 @@
                 <a class="nav-link" href="#">About Us</a>
               </li>
             </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                  <a class="btn btn-primary text-white ms-2" href="{% url 'logout' %}">Logout</a>
+              </li>
+            </ul>
+            {% endif %}
           </div>
         </div>
     </nav>

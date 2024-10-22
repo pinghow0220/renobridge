@@ -33,9 +33,33 @@
           </div>
         </div>
     </nav>
+
+    <div class="container mt-5">
+      <h2>Recommended Contractors for You</h2>
+      <div class="row">
+          {% for contractor in matching_contractors %}
+              <div class="col-md-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">{{ contractor.company_name }}</h5>
+                          <p class="card-text">{{ contractor.description }}</p>
+                          <p><strong>Location:</strong> {{ contractor.preferred_location }}</p>
+                          <p><strong>Services Provided:</strong> {{ contractor.services_provided }}</p>
+                          <p><strong>Expertise Styles:</strong> {{ contractor.expertise_styles }}</p>
+                          <!-- Updated URL generation -->
+                          <a href="{% url 'expert_profile' contractor.user.id %}" class="btn btn-primary">View Profile</a>
+                      </div>
+                  </div>
+              </div>
+          {% empty %}
+              <p>No contractors match your criteria at the moment.</p>
+          {% endfor %}
+      </div>
+  </div>
     <div class="col-lg-6 custom-spacing" style="margin-left: 50px; margin-top: -40px;">
         <h1 class="display-4 fw-bold mb-5">Smart Home Upgrades Experts in Selangor</h1>
     </div>
+    
     
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- First Card -->
