@@ -9,27 +9,37 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
-        <div class="container-fluid" style="background-color: white;">
-          <a class="navbar-brand" href="{% url 'renobridge' %}">Renobridge</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Dashboard</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'expert_invitation_list' %}">Invitation List</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+    <div class="container-fluid" style="background-color: white;">
+      <a class="navbar-brand" href="{% url 'renobridge' %}">Renobridge</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'expert_profile' request.user.id %}">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'expert_dashboard'%}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Invitation List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+        </ul>
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+              <a class="btn btn-primary text-white ms-2" href="{% url 'logout' %}">Logout</a>
+          </li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+</nav>
     
     <div class="container mt-5"></div>
         <div class="profile-section d-flex">
@@ -48,11 +58,11 @@
 
             <!-- Profile Information -->
             <div>
-                <p><strong>Company Name:</strong> <span id="displayCompanyName">--</span></p>
-                <p><strong>Company Address:</strong> <span id="displayCompanyAddress">--</span></p>
-                <p><strong>Company Email Address:</strong> <span id="displayCompanyEmail">--</span></p>
-                <p><strong>Years of Experience:</strong> <span id="displayYearsOfExperience">--</span></p>
-                <p><strong>Description:</strong> <span id="displayDescription">--</span></p>
+                <p><strong>Company Name:</strong> <span id="displayCompanyName">{{ contractor.company_name }}</span></p>
+                <p><strong>Company Address:</strong> <span id="displayCompanyAddress">{{ contractor.company_address }}</span></p>
+                <p><strong>Company Email Address:</strong> <span id="displayCompanyEmail">{{ contractor.email_address }}</span></p>
+                <p><strong>Years of Experience:</strong> <span id="displayYearsOfExperience">{{ contractor.years_of_experience }}</span></p>
+                <p><strong>Description:</strong> <span id="displayDescription">{{ contractor.description }}</span></p>
                 <button class="btn btn-primary">Manage Profile</button>
             </div>
         </div>
@@ -61,29 +71,30 @@
 
         <!-- Upload Project Photos Section -->
         <div class="mt-4">
-            <button class="btn btn-secondary">Upload photos of your past projects</button>
+          <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                  <input type="file" name="photo" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-secondary">Upload Photo</button>
+          </form>
+      </div>
+      <div class="mt-4">
+        <h4>Uploaded Photos of Past Projects</h4>
+        <div class="container">
+            <div class="row">
+                {% for photo in project_photos %}
+                    <div class="col-md-4 d-flex justify-content-center mb-4">
+                        <img src="{{ photo.photo.url }}" class="img-thumbnail project-photo" alt="Project Photo">
+                    </div>
+                {% empty %}
+                    <p>No photos uploaded yet.</p>
+                {% endfor %}
+            </div>
         </div>
     </div>
-
-    <script>
-        // Mock function to retrieve data from previous form submission
-        function loadProfileData() {
-            const companyName = localStorage.getItem('companyName') || '--';
-            const companyAddress = localStorage.getItem('companyAddress') || '--';
-            const companyEmail = localStorage.getItem('companyEmail') || '--';
-            const yearsOfExperience = localStorage.getItem('yearsOfExperience') || '--';
-            const description = localStorage.getItem('description') || '--';
-
-            document.getElementById('displayCompanyName').textContent = companyName;
-            document.getElementById('displayCompanyAddress').textContent = companyAddress;
-            document.getElementById('displayCompanyEmail').textContent = companyEmail;
-            document.getElementById('displayYearsOfExperience').textContent = yearsOfExperience;
-            document.getElementById('displayDescription').textContent = description;
-        }
-
-        // Load profile data when the page loads
-        window.onload = loadProfileData;
-    </script>
+      
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
