@@ -10,6 +10,7 @@ class CustomUser(AbstractUser):
 
 class Homeowner(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
     property_type = models.CharField(max_length=100)
     property_size = models.CharField(max_length=100)
@@ -17,6 +18,7 @@ class Homeowner(models.Model):
     services_required = models.TextField()  # Store services as comma-separated values
     budget = models.CharField(max_length=100)
     duration = models.CharField(max_length=100)
+    floorplan_img = models.ImageField(upload_to='floorplans/', blank=True, null=True)
 
 class Contractor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

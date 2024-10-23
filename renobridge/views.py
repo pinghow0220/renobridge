@@ -6,6 +6,7 @@ from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
 from .models import Homeowner, Contractor, ProjectPhoto
 from django.shortcuts import get_object_or_404
+from .forms import ContractorProfileForm, HomeownerForm
 
 
 def renobridge(request):
@@ -36,8 +37,21 @@ def expert_list(request):
             'error': 'Homeowner data does not exist for the current user. Please fill out the homeowner form.'
         })
 
-def expert_portfolio(request):
-    return render(request, 'expert_portfolio.html')
+def expert_portfolio(request, id):
+    # Get the CustomUser instance using the provided id
+    user = get_object_or_404(CustomUser, id=id)
+    
+    # Get the corresponding Contractor instance using the user
+    contractor = get_object_or_404(Contractor, user=user)
+
+    # Fetch all uploaded photos by the contractor
+    project_photos = ProjectPhoto.objects.filter(contractor=user)  # use the user to query the contractor field in ProjectPhoto
+
+    context = {
+        'contractor': contractor,
+        'project_photos': project_photos,
+    }
+    return render(request, 'expert_portfolio.html', context)
 
 def expert_profile(request, id):
     contractor = get_object_or_404(Contractor, user__id=id)
@@ -52,7 +66,7 @@ def expert_profile(request, id):
         # Handle project photo upload
         if 'project_photo' in request.FILES:
             photo = request.FILES['project_photo']
-            project_photo = ProjectPhoto(contractor=request.user, photo=photo)
+            project_photo = ProjectPhoto(contractor=contractor.user, photo=photo)
             project_photo.save()
             return redirect('expert_profile', id=id)
 
@@ -106,6 +120,7 @@ def owner_confirmation_list(request):
 
 def owner_input(request):
     if request.method == 'POST':
+        full_name = request.POST.get('fullName','')
         location = request.POST.get('location', '')
         property_type = request.POST.get('propertyType', '')
         property_size = request.POST.get('propertySize', '')
@@ -113,9 +128,9 @@ def owner_input(request):
         services_required = ','.join(request.POST.getlist('services'))
         budget = request.POST.get('budget', '')
         duration = request.POST.get('duration', '')
-
+        floorplan_img = request.FILES.get('floorplan_img', None)
         # Check that all fields are not empty
-        if not (location and property_type and property_size and preferred_style):
+        if not (full_name and location and property_type and property_size and preferred_style):
             return render(request, 'owner_input.html', {
                 'error': 'All fields are required.'
             })
@@ -124,13 +139,15 @@ def owner_input(request):
         try:
             homeowner = Homeowner.objects.create(
                 user=request.user,
+                full_name=full_name,
                 location=location,
                 property_type=property_type,
                 property_size=property_size,
                 preferred_style=preferred_style,
                 services_required=services_required,
                 budget=budget,
-                duration=duration
+                duration=duration,
+                floorplan_img=floorplan_img
             )
             homeowner.save()
             return redirect('expert_list')
@@ -188,3 +205,43 @@ class CustomLoginView(LoginView):
         elif user_type == 'contractor':
             return redirect('expert_dashboard')
         return super().form_valid(form)
+
+@login_required
+def edit_contractor_profile(request, id):
+    contractor = get_object_or_404(Contractor, user__id=id)
+    
+    if request.method == 'POST':
+        form = ContractorProfileForm(request.POST, request.FILES, instance=contractor)
+        if form.is_valid():
+            form.save()
+            return redirect('expert_profile', id=id)
+    else:
+        form = ContractorProfileForm(instance=contractor)
+
+    context = {
+        'form': form,
+        'contractor': contractor
+    }
+    return render(request, 'edit_contractor_profile.html', context)
+
+@login_required
+def view_homeowner_input(request):
+    homeowner = get_object_or_404(Homeowner, user=request.user)
+    context = {
+        'homeowner': homeowner
+    }
+    return render(request, 'view_homeowner_input.html', context)
+
+@login_required
+def edit_homeowner_input(request):
+    homeowner = get_object_or_404(Homeowner, user=request.user)
+
+    if request.method == 'POST':
+        form = HomeownerForm(request.POST, request.FILES, instance=homeowner)
+        if form.is_valid():
+            form.save()
+            return redirect('view_homeowner_input')
+    else:
+        form = HomeownerForm(instance=homeowner)
+
+    return render(request, 'edit_homeowner_input.html', {'form': form})

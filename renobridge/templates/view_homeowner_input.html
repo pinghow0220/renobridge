@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experts List</title>
+    <title>Homeowner Profile</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
@@ -22,7 +21,7 @@
                 <a class="nav-link active" aria-current="page" href="#">Services</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Experts</a>
+                <a class="nav-link" href="{% url 'expert_list' %}">Experts</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Dashboard</a>
@@ -46,37 +45,28 @@
           </div>
         </div>
     </nav>
-
+    
     <div class="container mt-5">
-      <h2>Recommended Contractors for You</h2>
-      <div class="row">
-          {% for contractor in matching_contractors %}
-              <div class="col-md-4">
-                  <div class="card">
-                      <div class="card-body">
-                          <h5 class="card-title">{{ contractor.company_name }}</h5>
-                          {% if contractor.logo %}
-                            <div class="text-center mb-3">
-                                <img src="{{ contractor.logo.url }}" alt="Company Logo" class="img-fluid rounded" style="width: 150px; height: 150px; object-fit: cover;">
-                            </div>
-                          {% endif %}
-                          <p class="card-text">{{ contractor.description }}</p>
-                          <p><strong>Location:</strong> {{ contractor.preferred_location }}</p>
-                          <p><strong>Services Provided:</strong> {{ contractor.services_provided }}</p>
-                          <p><strong>Expertise Styles:</strong> {{ contractor.expertise_styles }}</p>
-                          <!-- Updated URL generation -->
-                          <a href="{% url 'expert_portfolio' contractor.user.id %}" class="btn btn-primary">View Profile</a>
-                      </div>
-                  </div>
-              </div>
-          {% empty %}
-              <p>No contractors match your criteria at the moment.</p>
-          {% endfor %}
-      </div>
-  </div>
-    
-    
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <h3>Your Profile Information</h3>
+        <ul class="list-group mt-3">
+            <li class="list-group-item"><strong>Full Name:</strong> {{ homeowner.full_name }}</li>
+            <li class="list-group-item"><strong>Location:</strong> {{ homeowner.location }}</li>
+            <li class="list-group-item"><strong>Property Type:</strong> {{ homeowner.property_type }}</li>
+            <li class="list-group-item"><strong>Property Size:</strong> {{ homeowner.property_size }}</li>
+            <li class="list-group-item"><strong>Preferred Style:</strong> {{ homeowner.preferred_style }}</li>
+            <li class="list-group-item"><strong>Services Required:</strong> {{ homeowner.services_required }}</li>
+            <li class="list-group-item"><strong>Budget:</strong> {{ homeowner.budget }}</li>
+            <li class="list-group-item"><strong>Duration:</strong> {{ homeowner.duration }}</li>
+            <li class="list-group-item"><strong>Floorplan Image:</strong> <br>
+            {% if homeowner.floorplan_img %}
+                <img src="{{ homeowner.floorplan_img.url }}" class="img-fluid mt-2" style="width: 150px; height: 150px; object-fit: cover;" alt="Floorplan">
+            </li>
+            {% endif %}
+        </ul>
+        <div class="d-flex justify-content-end mt-3">
+            <a href="{% url 'edit_homeowner_input' %}" class="btn btn-warning">Edit Profile</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
