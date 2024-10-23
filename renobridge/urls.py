@@ -8,9 +8,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('renobridge/', views.renobridge, name='renobridge'),  # For index.html
     path('dashboard/', views.dashboard, name='dashboard'),  # For dashboard.html
+    path('view_homeowner_input/', views.view_homeowner_input, name='view_homeowner_input'),
+    path('edit_homeowner_input/', views.edit_homeowner_input, name='edit_homeowner_input'),
     path('expert_list/', views.expert_list, name='expert_list'),  # For expert_list.html
-    path('expert_portfolio/', views.expert_portfolio, name='expert_portfolio'),  # For expert_portfolio.html
+    path('expert_portfolio/<int:id>', views.expert_portfolio, name='expert_portfolio'),  # For expert_portfolio.html
     path('expert_profile/<int:id>/', views.expert_profile, name='expert_profile'),  # For expert_profile.html
+    path('edit_contractor_profile/<int:id>/', views.edit_contractor_profile, name='edit_contractor_profile'),
     path('experts_input/', views.experts_input, name='experts_input'),  # For experts_input.html
     path('completion_page/', views.completion_page, name='completion_page'),  # For completion_page.html
    

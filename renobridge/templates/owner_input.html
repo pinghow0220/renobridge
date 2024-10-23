@@ -38,11 +38,18 @@
         <div class="container form-container">
             <h3>Select your project preferences</h3>
 
-            <form id="ownerInputForm" method="POST">
+            <form id="ownerInputForm" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <!-- 1. Property Location -->
+                
+                <!-- Full Name -->
                 <div class="mb-3">
-                    <label for="location" class="form-label">1. Select the location of your property:</label>
+                    <label for="fullName" class="form-label">1. Enter your full name:</label>
+                    <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter your full name" required>
+                </div>
+            
+                <!-- 2. Property Location -->
+                <div class="mb-3">
+                    <label for="location" class="form-label">2. Select the location of your property:</label>
                     <select id="location" class="form-select" name="location">
                         <option>Selangor</option>
                         <option>Kuala Lumpur</option>
@@ -59,10 +66,10 @@
                         <option>Pahang</option>
                     </select>
                 </div>
-
-                <!-- 2. Property Type -->
+            
+                <!-- 3. Property Type -->
                 <div class="mb-3">
-                    <label for="propertyType" class="form-label">2. Select the type of your property:</label>
+                    <label for="propertyType" class="form-label">3. Select the type of your property:</label>
                     <select id="propertyType" class="form-select" name="propertyType">
                         <option>Apartment</option>
                         <option>Condominium</option>
@@ -71,10 +78,10 @@
                         <option>Bungalow</option>
                     </select>
                 </div>
-
-                <!-- 3. Property Size -->
+            
+                <!-- 4. Property Size -->
                 <div class="mb-3">
-                    <label for="propertySize" class="form-label">3. Select the range of your property size (sqft):</label>
+                    <label for="propertySize" class="form-label">4. Select the range of your property size (sqft):</label>
                     <select id="propertySize" class="form-select" name="propertySize">
                         <option>500 - 1000 sqft</option>
                         <option>1000 - 1500 sqft</option>
@@ -82,10 +89,10 @@
                         <option>2000 - 2500 sqft</option>
                     </select>
                 </div>
-
-                <!-- 4. Preferred Style -->
+            
+                <!-- 5. Preferred Style -->
                 <div class="mb-3">
-                    <label for="preferredStyle" class="form-label">4. Select the preferred style for your project:</label>
+                    <label for="preferredStyle" class="form-label">5. Select the preferred style for your project:</label>
                     <select id="preferredStyle" class="form-select" name="preferredStyle">
                         <option>Modern</option>
                         <option>Minimalist</option>
@@ -93,10 +100,10 @@
                         <option>Traditional</option>
                     </select>
                 </div>
-
-                <!-- 5. Services -->
+            
+                <!-- 6. Services -->
                 <div class="mb-3">
-                    <label class="form-label">5. Select services you require:</label><br>
+                    <label class="form-label">6. Select services you require:</label><br>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="service1" name="services" value="Smart Home Upgrades">
                         <label class="form-check-label" for="service1">Smart Home Upgrades</label>
@@ -130,10 +137,10 @@
                         <label class="form-check-label" for="service8">Other</label>
                     </div>
                 </div>
-
-                <!-- 6. Budget -->
+            
+                <!-- 7. Budget -->
                 <div class="mb-3">
-                    <label for="budget" class="form-label">6. Select your budget for your project:</label>
+                    <label for="budget" class="form-label">7. Select your budget for your project:</label>
                     <select id="budget" class="form-select" name="budget">
                         <option>RM50,000 - RM100,000</option>
                         <option>RM100,000 - RM200,000</option>
@@ -141,10 +148,10 @@
                         <option>RM300,000 - RM500,000</option>
                     </select>
                 </div>
-
-                <!-- 7. Duration -->
+            
+                <!-- 8. Duration -->
                 <div class="mb-3">
-                    <label for="duration" class="form-label">7. Select your expected duration for your project:</label>
+                    <label for="duration" class="form-label">8. Select your expected duration for your project:</label>
                     <select id="duration" class="form-select" name="duration">
                         <option>1 month</option>
                         <option>2 months</option>
@@ -152,17 +159,17 @@
                         <option>6 months</option>
                     </select>
                 </div>
-
-                <!-- 8. Upload files -->
+            
+                <!-- 9. Upload files -->
                 <div class="mb-3">
-                    <label for="uploadFiles" class="form-label">8. Upload your floor plan, concept drawing, 3D designs if there is any:</label>
+                    <label for="uploadFiles" class="form-label">Upload your floor plan, concept drawing, 3D designs if there is any:</label>
                     <input type="file" id="uploadFiles" name="floorplan_img" class="form-control">
-                    <button type="button" class="btn-upload">Upload</button>
                 </div>
-
+            
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            
         </div>
     </div>
 

@@ -69,7 +69,7 @@
                 <p><strong>Company Email Address:</strong> <span id="displayCompanyEmail">{{ contractor.email_address }}</span></p>
                 <p><strong>Years of Experience:</strong> <span id="displayYearsOfExperience">{{ contractor.years_of_experience }}</span></p>
                 <p><strong>Description:</strong> <span id="displayDescription">{{ contractor.description }}</span></p>
-                <button class="btn btn-primary">Manage Profile</button>
+                <a href="{% url 'edit_contractor_profile' contractor.user.id %}" class="btn btn-primary">Manage Profile</a>
             </div>
       </div>
 
@@ -80,7 +80,7 @@
           <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="mb-3">
-                  <input type="file" name="photo" class="form-control" required>
+                  <input type="file" name="project_photo" class="form-control" required>
               </div>
               <button type="submit" class="btn btn-secondary">Upload Photo</button>
           </form>

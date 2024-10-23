@@ -30,6 +30,13 @@
                 <a class="nav-link" href="#">About Us</a>
               </li>
             </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                  <a class="btn btn-primary text-white ms-2" href="{% url 'logout' %}">Logout</a>
+              </li>
+            </ul>
+            {% endif %}
           </div>
         </div>
     </nav>
@@ -38,27 +45,29 @@
     <div class="container my-5">
         <div class="row">
             <div class="col-md-3 text-center">
-                <img src="https://st2.depositphotos.com/4221849/8056/v/450/depositphotos_80567196-stock-illustration-red-circle-logo.jpg"
-                    class="img-fluid rounded mb-3" alt="VLision Logo" style="max-height: 180px;">
+                {% if contractor.logo %}
+                    <img src="{{ contractor.logo.url }}" class="img-fluid rounded mb-3" alt="Company Logo" style="max-height: 180px;">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" class="img-fluid rounded mb-3" alt="Default Logo" style="max-height: 180px;">
+                {% endif %}
                 <!-- Rating -->
                 <div>
                     <p class="mb-1">★★★★★ <span class="text-muted">(6)</span></p>
                 </div>
-                <!-- Buttons -->
+
                 <div class="mb-2">
-                    <button class="btn btn-primary me-2">Chat Now</button>
                     <button class="btn btn-outline-primary">Request Collaboration</button>
                 </div>
+
             </div>
 
             <div class="col-md-9">
                 <!-- Company Info -->
-                <h5>Company Name: VLusion SDN. BHD</h5>
-                <p><strong>Company Address:</strong> No 87, Level 2, Wisma Tower, Kuala Lumpur</p>
-                <p><strong>Company Email Address:</strong> Vlusion01@gmail.com</p>
-                <p><strong>Years of Experience:</strong> 10 Years</p>
-                <p><strong>Description:</strong> Vlusion Interior founded in January of 2013 we are formed by a group of
-                    experienced and intuitive contractors that provide top services.</p>
+                <h5>Company Name: {{ contractor.company_name }}</h5>
+                <p><strong>Company Address:</strong> {{ contractor.company_address }}</p>
+                <p><strong>Company Email Address:</strong> {{ contractor.email_address }}</p>
+                <p><strong>Years of Experience:</strong> {{ contractor.years_of_experience }} Years</p>
+                <p><strong>Description:</strong> {{ contractor.description }}</p>
             </div>
         </div>
 
@@ -69,21 +78,17 @@
         <div>
             <h5>Past Project(s)</h5>
             <div class="row">
-                <div class="col-md-4">
-                    <img src="https://ssl.cdn-redfin.com/photo/48/islphoto/524/genIslnoResize.240019524_4.jpg" class="img-fluid rounded mb-3 project-img" alt="Project 1">
-                </div>
-                <div class="col-md-4">
-                    <img src="https://d3ei7aafq0pldq.cloudfront.net/2ab8f7404d8e39865baab476ee8e2adc07d064aa-15-medium.jpeg" class="img-fluid rounded mb-3 project-img" alt="Project 2">
-                </div>
-                <div class="col-md-4">
-                    <img src="https://brilliantsa.com.au/wp-content/uploads/2022/04/home-renovation-adelaide.jpg" class="img-fluid rounded mb-3 project-img" alt="Project 3">
-                </div>
+                {% for photo in project_photos %}
+                    <div class="col-md-4">
+                        <img src="{{ photo.photo.url }}" class="img-fluid rounded mb-3 project-img" alt="Project Photo">
+                    </div>
+                {% empty %}
+                    <p>No past projects uploaded yet.</p>
+                {% endfor %}
             </div>
         </div>
     </div>    
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
