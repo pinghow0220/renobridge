@@ -42,11 +42,19 @@ def expert_portfolio(request):
 def expert_profile(request, id):
     contractor = get_object_or_404(Contractor, user__id=id)
 
-    if request.method == 'POST' and request.FILES.get('photo'):
-        photo = request.FILES['photo']
-        project_photo = ProjectPhoto(contractor=request.user, photo=photo)
-        project_photo.save()
-        return redirect('expert_profile', id=id)
+    if request.method == 'POST':
+        # Handle company logo upload
+        if 'logo' in request.FILES:
+            contractor.logo = request.FILES['logo']
+            contractor.save()
+            return redirect('expert_profile', id=id)
+        
+        # Handle project photo upload
+        if 'project_photo' in request.FILES:
+            photo = request.FILES['project_photo']
+            project_photo = ProjectPhoto(contractor=request.user, photo=photo)
+            project_photo.save()
+            return redirect('expert_profile', id=id)
 
     # Fetch all uploaded photos by the contractor
     project_photos = ProjectPhoto.objects.filter(contractor=request.user)

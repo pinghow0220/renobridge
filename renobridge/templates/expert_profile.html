@@ -44,18 +44,24 @@
     <div class="container mt-5"></div>
         <div class="profile-section d-flex">
             <!-- Profile Photo Upload -->
-            <div class="me-4">
-                <div class="profile-photo text-center">
-                    <label for="uploadPhoto" class="form-label">
-                        <span>Upload a photo</span>
-                    </label>
-                    <input type="file" class="form-control d-none" id="uploadPhoto">
-                </div>
-                <div class="text-center">
-                    <span class="rating">★★★★★</span> <span>(0)</span>
-                </div>
-            </div>
-
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <!-- Logo Upload Section -->
+              <div class="me-4">
+                  <div class="profile-photo text-center">
+                      <label for="uploadLogo" id="photoLabel" class="form-label" style="cursor: pointer;">
+                          <img id="profileImage" src="{% if contractor.logo %}{{ contractor.logo.url }}{% else %}https://via.placeholder.com/150{% endif %}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" alt="Upload a photo">
+                      </label>
+                      <input type="file" name="logo" class="form-control d-none" id="uploadLogo">
+                  </div>
+                  <div class="text-center mt-2">
+                      <button type="submit" class="btn btn-primary mt-2">Save Logo</button>
+                  </div>
+              </div>
+              <div>
+                <span class="rating">★★★★★ (0)</span>
+              </div>
+          </form>  
             <!-- Profile Information -->
             <div>
                 <p><strong>Company Name:</strong> <span id="displayCompanyName">{{ contractor.company_name }}</span></p>
@@ -65,7 +71,7 @@
                 <p><strong>Description:</strong> <span id="displayDescription">{{ contractor.description }}</span></p>
                 <button class="btn btn-primary">Manage Profile</button>
             </div>
-        </div>
+      </div>
 
         <hr>
 
@@ -95,7 +101,6 @@
     </div>
       
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
