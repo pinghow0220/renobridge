@@ -22,6 +22,7 @@ class Contractor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=200)
     company_address = models.CharField(max_length=200)
+    logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)
     email_address = models.EmailField()
     years_of_experience = models.CharField(max_length=50)
     description = models.TextField()
