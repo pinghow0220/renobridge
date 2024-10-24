@@ -61,9 +61,10 @@
                     <p class="mb-1">★★★★★ <span class="text-muted">(6)</span></p>
                 </div>
 
-                <div class="mb-2">
-                    <button class="btn btn-outline-primary">Request Collaboration</button>
-                </div>
+                <form action="{% url 'request_collaboration' contractor.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Request Collaboration</button>
+                </form>
 
             </div>
 

@@ -61,54 +61,37 @@
     </nav>
 
     <div class="container mt-5">
-        <h3>Invitation List</h3>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Property Location</th>
-                    <th>Property Type</th>
-                    <th>Service Requested</th>
-                    <th>Budget Allocated</th>
-                    <th>Expected Duration</th>
-                    <th>Disappear in</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Raymond Lam</td>
-                    <td>Kuala Lumpur</td>
-                    <td>Condo</td>
-                    <td>Painting</td>
-                    <td>RM 300</td>
-                    <td>2 days</td>
-                    <td>7 days</td>
-                    <td>
-                        <button class="btn btn-primary">Chat</button>
-                        <button class="btn btn-success">Accept</button>
-                        <button class="btn btn-danger">Reject</button>
-                        <button class="btn btn-file">View attached files</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Michie Low</td>
-                    <td>Selangor</td>
-                    <td>Semi D</td>
-                    <td>Full house renovation</td>
-                    <td>RM 20,000</td>
-                    <td>3 months</td>
-                    <td>5 days</td>
-                    <td>
-                        <button class="btn btn-primary">Chat</button>
-                        <button class="btn btn-success">Accept</button>
-                        <button class="btn btn-danger">Reject</button>
-                        <button class="btn btn-file">View attached files</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+      <h3>Pending Collaboration Requests</h3>
+      <div class="row">
+          {% for invitation in invitations %}
+          <div class="card mb-3">
+              <div class="card-body">
+                  <h5 class="card-title">Homeowner: {{ invitation.homeowner.full_name }}</h5>
+                  <p class="card-text">
+                      <strong>Location:</strong> {{ invitation.homeowner.location }}<br>
+                      <strong>Property Type:</strong> {{ invitation.homeowner.property_type }}<br>
+                      <strong>Service Requested:</strong> {{ invitation.homeowner.services_required }}<br>
+                      <strong>Budget:</strong> {{ invitation.homeowner.budget }}<br>
+                      <strong>Duration:</strong> {{ invitation.homeowner.duration }}<br>
+                      <strong>Preferred Start Date:</strong> {{ invitation.homeowner.start_date }}<br>
+                      {% if invitation.homeowner.floorplan_img %}
+                      <strong>Floorplan:</strong>
+                      <a href="{{ invitation.homeowner.floorplan_img.url }}" target="_blank">View Floorplan</a><br>
+                      {% endif %}
+                  </p>
+                  <form method="POST" action="{% url 'suggest_proposal' invitation.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-success">Suggest Proposal</button>
+                  </form>
+                  <form method="POST" action="{% url 'reject_proposal' invitation.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger mt-2">Reject</button>
+                  </form>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

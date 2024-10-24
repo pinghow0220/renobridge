@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class CustomUser(AbstractUser):
     user_type = models.CharField(max_length=20)  # Store userType (e.g., "homeowner", "contractor")
@@ -18,6 +21,7 @@ class Homeowner(models.Model):
     services_required = models.TextField()  # Store services as comma-separated values
     budget = models.CharField(max_length=100)
     duration = models.CharField(max_length=100)
+    start_date = models.DateField(null=True, blank=True)
     floorplan_img = models.ImageField(upload_to='floorplans/', blank=True, null=True)
 
 class Contractor(models.Model):
@@ -33,6 +37,23 @@ class Contractor(models.Model):
     expertise_styles = models.TextField()  # Store expertise styles as comma-separated values
 
 class ProjectPhoto(models.Model):
-    contractor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='project_photos/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+class CollaborationRequest(models.Model):
+    homeowner = models.ForeignKey(Homeowner, on_delete=models.CASCADE)
+    contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50, default="Pending")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Collaboration Request from {self.homeowner.full_name} to {self.contractor.company_name}"
+
+@receiver(post_save, sender=CustomUser)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        if instance.user_type == 'homeowner':
+            Homeowner.objects.create(user=instance)
+        elif instance.user_type == 'contractor':
+            Contractor.objects.create(user=instance)
