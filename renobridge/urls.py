@@ -25,6 +25,9 @@ urlpatterns = [
     path('expert_dashboard/', views.expert_dashboard, name='expert_dashboard'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login/', CustomLoginView.as_view(template_name='login.html'), name='login'),
+    path('request_collaboration/<int:contractor_id>/', views.request_collaboration, name='request_collaboration'),
+    path('suggest_proposal/<int:invitation_id>/', views.suggest_proposal, name='suggest_proposal'),
+    path('reject_proposal/<int:invitation_id>/', views.reject_proposal, name='reject_proposal'),
 ]
 
 if settings.DEBUG:

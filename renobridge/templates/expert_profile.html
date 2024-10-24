@@ -75,30 +75,31 @@
 
         <hr>
 
-        <!-- Upload Project Photos Section -->
         <div class="mt-4">
           <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="mb-3">
-                  <input type="file" name="project_photo" class="form-control" required>
+                  <input type="file" name="photo" class="form-control" required>
               </div>
               <button type="submit" class="btn btn-secondary">Upload Photo</button>
           </form>
       </div>
+      
+      <!-- Display Uploaded Photos -->
       <div class="mt-4">
         <h4>Uploaded Photos of Past Projects</h4>
-        <div class="container">
-            <div class="row">
-                {% for photo in project_photos %}
-                    <div class="col-md-4 d-flex justify-content-center mb-4">
-                        <img src="{{ photo.photo.url }}" class="img-thumbnail project-photo" alt="Project Photo">
+        <div class="row justify-content-center">
+            {% for photo in project_photos %}
+                <div class="col-md-4 d-flex justify-content-center mb-4">
+                    <div class="card" style="width: 25rem;">
+                        <img src="{{ photo.photo.url }}" class="card-img-top img-fluid rounded" alt="Project Photo" style="height: 350px; object-fit: cover;">
                     </div>
-                {% empty %}
-                    <p>No photos uploaded yet.</p>
-                {% endfor %}
-            </div>
+                </div>
+            {% empty %}
+                <p class="text-muted text-center">No photos uploaded yet.</p>
+            {% endfor %}
         </div>
-    </div>
+      </div>
       
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
