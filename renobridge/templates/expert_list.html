@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
         <div class="container-fluid" style="background-color: white;">
-          <a class="navbar-brand" href="{% url 'renobridge' %}">Renobridge</a>
+          <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -22,10 +22,10 @@
                 <a class="nav-link active" aria-current="page" href="#">Services</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Experts</a>
+                <a class="nav-link" href="{% url 'expert_list' %}">Experts</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">About Us</a>
@@ -35,7 +35,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'view_homeowner_input' %}" title="View Profile">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-user fa-lg"></i>
                 </a>
               </li>
               <li class="nav-item">
