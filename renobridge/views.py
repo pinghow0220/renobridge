@@ -6,7 +6,7 @@ from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
 from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest
 from django.shortcuts import get_object_or_404
-from .forms import ContractorProfileForm, HomeownerForm
+from .forms import ContractorProfileForm, HomeownerForm, ProposalForm
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseForbidden
@@ -297,8 +297,6 @@ def request_collaboration(request, contractor_id):
             recipient_list=[contractor.email_address]
         )
 
-        return redirect('owner_confirmation_list')
-
     return redirect('expert_list')
 
 def suggest_proposal(request, invitation_id):
@@ -337,3 +335,75 @@ def reject_proposal(request, invitation_id):
 
     return redirect('expert_dashboard')
 
+def suggest_proposal(request, invitation_id):
+    # Fetch the collaboration request using the provided ID
+    invitation = get_object_or_404(CollaborationRequest, id=invitation_id)
+
+    if request.method == 'POST':
+        # Get the suggested details from the contractor's input
+        suggested_cost = request.POST.get('suggested_cost')
+        suggested_duration = request.POST.get('suggested_duration')
+        suggested_start_date = request.POST.get('suggested_start_date')
+
+        # Save the suggested proposal details to the CollaborationRequest
+        invitation.suggested_cost = suggested_cost
+        invitation.suggested_duration = suggested_duration
+        invitation.suggested_start_date = suggested_start_date
+        invitation.status = "Proposal Sent"  # Update the status to match the homeowner's view
+        invitation.save()
+
+        # Send notification email to the homeowner
+        send_mail(
+            subject='New Proposal Received',
+            message=f'Hello {invitation.homeowner.full_name},\n\n'
+                    f'{invitation.contractor.company_name} has submitted a proposal for your project:\n'
+                    f'Cost: {suggested_cost}\n'
+                    f'Duration: {suggested_duration} days\n'
+                    f'Start Date: {suggested_start_date}\n\n'
+                    f'Please log in to view more details.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[invitation.homeowner.user.email],
+            fail_silently=False,
+        )
+
+        # Redirect back to the invitation list after saving the proposal
+        return redirect('expert_invitation_list')
+
+    return render(request, 'suggest_proposal.html', {'invitation': invitation})
+
+
+def compare_proposals(request):
+    homeowner = Homeowner.objects.get(user=request.user)
+    proposals = CollaborationRequest.objects.filter(homeowner=homeowner, status="Proposal Sent")
+
+    print(f"Fetched Proposals Count: {proposals.count()}")
+    
+    context = {
+        'proposals': proposals
+    }
+    return render(request, 'compare_proposals.html', context)
+
+def start_project(request, proposal_id):
+    if request.method == 'POST':
+        # Get the collaboration request
+        collaboration_request = get_object_or_404(CollaborationRequest, id=proposal_id)
+
+        # Update status to "Accepted" or "In Progress"
+        collaboration_request.status = "In Progress"
+        collaboration_request.save()
+
+        # Notify contractor that the project has started
+        send_mail(
+            subject='Collaboration Request Accepted',
+            message=f'Hello {collaboration_request.contractor.company_name},\n\n'
+                    f'The homeowner has accepted your proposal for the project starting on {collaboration_request.suggested_start_date}.\n\n'
+                    f'Please log in to view more details.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[collaboration_request.contractor.email_address],
+            fail_silently=False,
+        )
+
+        # Redirect the homeowner to the dashboard or another relevant page
+        return redirect('dashboard')
+
+    return redirect('compare_proposals')

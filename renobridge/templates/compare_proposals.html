@@ -4,17 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+    <title>Compare Proposals</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'style.css' %}">
@@ -59,20 +49,43 @@
       </div>
     </div>
   </nav>
-    
-    <div class="container mt-5">
-        <h3>Edit Your Profile</h3>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3">
-                {{ form.as_p }}
-            </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </form>
+      
+      <div class="container mt-5">
+        <h3>Choose one of the companies below to confirm collaboration</h3>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Total Duration Offered</th>
+                    <th>Total Fee Charged</th>
+                    <th>Starting Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proposal in proposals %}
+                    <tr>
+                        <td>{{ proposal.contractor.company_name }}</td>
+                        <td>{{ proposal.suggested_duration }} days</td>
+                        <td>RM {{ proposal.suggested_cost }}</td>
+                        <td>{{ proposal.suggested_start_date }}</td>
+                        <td>
+                            <a href="{% url 'expert_portfolio' proposal.contractor.user.id %}" class="btn btn-secondary">View Portfolio</a>
+                            <form method="POST" action="{% url 'start_project' proposal.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success ms-2">Start Project</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No proposals available to compare.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
-
 </html>
