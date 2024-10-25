@@ -38,27 +38,37 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
-        <div class="container-fluid" style="background-color: white;">
-          <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'expert_dashboard' %}">Dashboard</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Invitation List</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+    <div class="container-fluid" style="background-color: white;">
+      <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'expert_profile' request.user.id %}">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'expert_dashboard'%}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'expert_invitation_list'%}">Invitation List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+        </ul>
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+              <a class="btn btn-primary text-white ms-2" href="{% url 'logout' %}">Logout</a>
+          </li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+</nav>
 
     <div class="container mt-5">
       <h3>Pending Collaboration Requests</h3>
@@ -79,9 +89,9 @@
                       <a href="{{ invitation.homeowner.floorplan_img.url }}" target="_blank">View Floorplan</a><br>
                       {% endif %}
                   </p>
-                  <form method="POST" action="{% url 'suggest_proposal' invitation.id %}">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-success">Suggest Proposal</button>
+                  <form method="GET" action="{% url 'suggest_proposal' invitation.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Suggest Proposal</button>
                   </form>
                   <form method="POST" action="{% url 'reject_proposal' invitation.id %}">
                       {% csrf_token %}

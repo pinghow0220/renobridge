@@ -28,6 +28,9 @@ urlpatterns = [
     path('request_collaboration/<int:contractor_id>/', views.request_collaboration, name='request_collaboration'),
     path('suggest_proposal/<int:invitation_id>/', views.suggest_proposal, name='suggest_proposal'),
     path('reject_proposal/<int:invitation_id>/', views.reject_proposal, name='reject_proposal'),
+    path('suggest_proposal/<int:invitation_id>/', views.suggest_proposal, name='suggest_proposal'),
+    path('compare_proposals/', views.compare_proposals, name='compare_proposals'),
+    path('start_project/<int:proposal_id>/', views.start_project, name='start_project'),
 ]
 
 if settings.DEBUG:
