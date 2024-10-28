@@ -53,46 +53,25 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="row">
-            <!-- Project Expense Monitoring -->
-            <div class="col-md-6 monitoring-section">
-                <h4>Project Expense Monitoring</h4>
-                <div class="monitoring-visual">
-                    <!-- Placeholder for Pie Chart -->
-                    <span>&#9716;</span> <!-- Placeholder symbol for pie chart -->
-                </div>
-                <div class="button-container">
-                    <button class="btn btn-outline-primary btn-sm custom-btn" type="button">Upload Expenses</button>
-                </div>
-                <p><strong>Budget Allocated:</strong></p>
-                <p><strong>Expenses Spent:</strong></p>
-                <p><strong>Budget Remaining:</strong></p>
-                <p><strong>Expenses over Budget Percentage:</strong></p>
-            </div>
-    
-            <!-- Project Timeline Monitoring -->
-            <div class="col-md-6">
-                <h4>Project Timeline Monitoring</h4>
-                <div class="line-chart">
-                    <!-- Placeholder for Line Chart -->
-                    <div style="height: 30px;"></div>
-                    <div style="height: 60px;"></div>
-                    <div style="height: 40px;"></div>
-                </div>
-                <br>
-                <div class="button-container">
-                    <button class="btn btn-outline-primary btn-sm custom-btn" type="button">Upload Progress</button>
-                </div>
-                <p><strong>Total Expected Duration:</strong></p>
-                <p><strong>Duration Spent:</strong></p>
-                <p><strong>Remaining Duration:</strong></p>
-                <p><strong>Work Done Percentage:</strong></p>
-            </div>
-        </div>
-    </div>
+    <h2>Ongoing Projects</h2>
+    <ul>
+        {% for project in projects %}
+            <li>
+                Project ID: {{ project.id }} - Owner: {{ project.owner.user.username }}
+                <div>
+                  <strong>Progress:</strong>
+                  <div class="progress" style="width: 50%; margin-top: 10px;">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="{{ project.progress_percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{project.progress_percentage}}%;">
+                          {{ project.progress_percentage }}%
+                      </div>
+                  </div>
+              </div>
+                <a href="{% url 'select_processes' project.id %}">Select Required Processes</a>
+                | <a href="{% url 'update_progress' project.id %}">Update Progress</a>
+              </li>
+        {% endfor %}
+    </ul>
        
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

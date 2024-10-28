@@ -53,6 +53,21 @@ class CollaborationRequest(models.Model):
 
     def __str__(self):
         return f"Collaboration Request from {self.homeowner.full_name} to {self.contractor.company_name}"
+    
+class Project(models.Model):
+    owner = models.ForeignKey(Homeowner, on_delete=models.CASCADE, related_name='projects')
+    contractor = models.ForeignKey(Contractor, on_delete=models.SET_NULL, null=True, related_name='projects')
+    processes_required = models.JSONField(null=True, blank=True)
+    processes_completed = models.JSONField(null=True, blank=True)
+    budget_allocated = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    expenses_spent = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_duration = models.PositiveIntegerField(help_text="Expected total duration in days", null=True, blank=True)
+    duration_spent = models.PositiveIntegerField(help_text="Actual duration spent in days", default=0)
+    progress_percentage = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default='In Progress')
+
+    def __str__(self):
+        return f'Project for {self.owner.user.username} - {self.id}'
 
 @receiver(post_save, sender=CustomUser)
 def create_profile(sender, instance, created, **kwargs):

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Processes</title>
+</head>
+<body>
+    <h2>Select Required Processes for Project {{ project.id }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <label for="other_process">Others:</label><br>
+    <input type="text" id="other_process" name="other_process" placeholder="Enter other process">
+    <button type="button" onclick="addOtherProcess()">ADD</button><br><br>
+    
+    <!-- Div for dynamically added fields -->
+    <div id="additional_processes"></div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    function addOtherProcess() {
+        const otherProcessInput = document.getElementById("other_process");
+        const otherProcessValue = otherProcessInput.value.trim();
+        
+        if (otherProcessValue !== "") {
+            const additionalProcessesDiv = document.getElementById("additional_processes");
+
+            // Create a new hidden input element to submit the additional value
+            const newInput = document.createElement("input");
+            newInput.type = "hidden";
+            newInput.name = "processes_required";
+            newInput.value = otherProcessValue;
+
+            // Append the new hidden input to the div
+            additionalProcessesDiv.appendChild(newInput);
+
+            // Clear the input field
+            otherProcessInput.value = "";
+        }
+    }
+</script>
+</body>
+</html>

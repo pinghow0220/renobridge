@@ -31,6 +31,9 @@ urlpatterns = [
     path('suggest_proposal/<int:invitation_id>/', views.suggest_proposal, name='suggest_proposal'),
     path('compare_proposals/', views.compare_proposals, name='compare_proposals'),
     path('start_project/<int:proposal_id>/', views.start_project, name='start_project'),
+    path('expert/dashboard/', views.contractor_dashboard, name='expert_dashboard'),
+    path('project/<int:project_id>/select_processes/', views.select_processes, name='select_processes'),
+    path('project/<int:project_id>/update_progress/', views.update_progress, name='update_progress'),
 ]
 
 if settings.DEBUG:

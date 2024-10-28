@@ -4,19 +4,17 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
-from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest
+from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project
 from django.shortcuts import get_object_or_404
-from .forms import ContractorProfileForm, HomeownerForm, ProposalForm
+from .forms import ContractorProfileForm, HomeownerForm, ProposalForm, ProcessSelectionForm
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseForbidden
+from django import forms
 
 
 def renobridge(request):
     return render(request, 'index.html')
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
 
 def expert_list(request):
     try:
@@ -385,25 +383,132 @@ def compare_proposals(request):
 
 def start_project(request, proposal_id):
     if request.method == 'POST':
-        # Get the collaboration request
         collaboration_request = get_object_or_404(CollaborationRequest, id=proposal_id)
 
-        # Update status to "Accepted" or "In Progress"
         collaboration_request.status = "In Progress"
         collaboration_request.save()
 
-        # Notify contractor that the project has started
+        contractor = collaboration_request.contractor
+        # Ensure this contractor exists in the system and matches the one who logs in later.
+        if not Contractor.objects.filter(pk=contractor.pk).exists():
+            return redirect('dashboard')  # Handle error or redirect accordingly
+
+        # Create project with validated contractor
+        project = Project.objects.create(
+            owner=collaboration_request.homeowner,
+            contractor=contractor,
+            budget_allocated=collaboration_request.suggested_cost,
+            total_duration=collaboration_request.suggested_duration
+        )
+        project.save()
+
+        print(f'Project created: ID={project.id}, Owner={project.owner}, Contractor={project.contractor}')
+
+        # Notify contractor via email
         send_mail(
             subject='Collaboration Request Accepted',
-            message=f'Hello {collaboration_request.contractor.company_name},\n\n'
+            message=f'Hello {contractor.company_name},\n\n'
                     f'The homeowner has accepted your proposal for the project starting on {collaboration_request.suggested_start_date}.\n\n'
                     f'Please log in to view more details.',
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[collaboration_request.contractor.email_address],
+            recipient_list=[contractor.email_address],
             fail_silently=False,
         )
 
-        # Redirect the homeowner to the dashboard or another relevant page
         return redirect('dashboard')
 
     return redirect('compare_proposals')
+
+
+@login_required
+def contractor_dashboard(request):
+    contractor = get_object_or_404(Contractor, user=request.user)
+    ongoing_projects = Project.objects.filter(contractor=contractor)
+    print(f'contractor_dashboard view reached for contractor: {contractor.company_name}')
+    print(f'Ongoing projects for contractor {contractor.company_name}: {list(ongoing_projects)}')
+    return render(request, 'expert_dashboard.html', {'projects': ongoing_projects})
+
+@login_required
+def select_processes(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == 'POST':
+        # Extract custom processes from POST data
+        custom_processes = request.POST.getlist('processes_required')
+
+        # Create a new instance of the form with POST data
+        form = ProcessSelectionForm(request.POST)
+
+        # Add custom processes to the choices before form validation
+        current_choices = form.fields['processes_required'].choices
+        updated_choices = current_choices + [(custom, custom) for custom in custom_processes if custom not in dict(current_choices)]
+        form.fields['processes_required'].choices = updated_choices
+
+        if form.is_valid():
+            # Save selected processes to the project
+            project.processes_required = form.cleaned_data['processes_required']
+            project.save()
+            return redirect('update_progress', project_id=project.id)
+
+    else:
+        form = ProcessSelectionForm()
+
+    return render(request, 'select_processes.html', {'form': form, 'project': project})
+
+@login_required
+def update_progress(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    # Extract the required processes list
+    processes_required = project.processes_required if project.processes_required else []
+
+    # Define a dynamic form for selecting completed tasks based on required processes
+    class ProgressUpdateForm(forms.Form):
+        processes_completed = forms.MultipleChoiceField(
+            choices=[(process, process.replace('_', ' ').title()) for process in processes_required],
+            widget=forms.CheckboxSelectMultiple,
+            required=False
+        )
+
+    # Handle the form submission
+    if request.method == 'POST':
+        form = ProgressUpdateForm(request.POST)
+        if form.is_valid():
+            # Update the processes completed
+            project.processes_completed = form.cleaned_data['processes_completed']
+            
+            # Calculate progress percentage
+            total_tasks = len(processes_required)
+            completed_tasks = len(project.processes_completed) if project.processes_completed else 0
+            project.progress_percentage = (completed_tasks / total_tasks) * 100 if total_tasks > 0 else 0
+
+            # Save the updated project details
+            project.save()
+
+            # Redirect to contractor dashboard or a summary page
+            return redirect('expert_dashboard')
+
+    # If request is not POST, render the form with initial data
+    else:
+        initial_data = {'processes_completed': project.processes_completed}
+        form = ProgressUpdateForm(initial=initial_data)
+
+    return render(request, 'update_progress.html', {'form': form, 'project': project})
+
+@login_required
+def dashboard(request):
+    # Assuming each homeowner has a single ongoing project. Adjust accordingly if they have multiple projects.
+    homeowner = get_object_or_404(Homeowner, user=request.user)
+    project = Project.objects.filter(owner=homeowner).first()  # Get the first project, or adjust logic as needed
+
+    if project:
+        remaining_duration = max(project.total_duration - project.duration_spent, 0)
+    else:
+        remaining_duration = 0
+    # Pass the project to the context
+    context = {
+        'project': project,
+        'remaining_duration': remaining_duration,
+    }
+
+    return render(request, 'dashboard.html', context)
