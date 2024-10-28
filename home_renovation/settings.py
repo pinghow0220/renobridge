@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'renobridge',
+    'background_task',
 ]
 
 LOGIN_REDIRECT_URL = 'dashboard'  # This can be customized
@@ -140,3 +141,18 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'leepinghow0220@gmail.com' 
 EMAIL_HOST_PASSWORD = 'yzqi xwya hxwf ckab' 
 DEFAULT_FROM_EMAIL = 'leepinghow0220@gmail.com'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
