@@ -1,0 +1,13 @@
+{% block content %}
+    <h2>Progress Photos for Project {{ project.id }}</h2>
+    <div>
+        {% if project.photos.all %}
+            {% for photo in project.photos.all %}
+                <img src="{{ photo.photo.url }}" alt="Progress Image" style="max-width: 300px; margin: 10px;">
+            {% endfor %}
+        {% else %}
+            <p>No photos uploaded yet.</p>
+        {% endif %}
+    </div>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+{% endblock %}
