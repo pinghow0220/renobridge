@@ -512,3 +512,21 @@ def dashboard(request):
     }
 
     return render(request, 'dashboard.html', context)
+
+@login_required
+def upload_project_photo(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    contractor = get_object_or_404(Contractor, user=request.user)
+
+    if request.method == 'POST' and request.FILES.get('progress_photo'):
+        photo = request.FILES['progress_photo']
+        ProjectPhoto.objects.create(project=project, contractor=contractor, photo=photo)
+        return redirect('expert_dashboard')
+
+    return redirect('expert_dashboard')
+
+@login_required
+def view_project_photos(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    return render(request, 'view_project_photos.html', {'project': project})

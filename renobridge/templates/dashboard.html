@@ -79,6 +79,8 @@
                     {{ project.progress_percentage|default:"0"|floatformat:1 }}%
                 </div>
             </div>
+            <br>
+            <a href="{% url 'view_project_photos' project.id %}" class="btn btn-primary">View Progress Photos</a>
             
               <div style="margin-top: 15px;">
                   <p><strong>Total Expected Duration:</strong> {{ project.total_duration }} days</p>

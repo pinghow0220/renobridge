@@ -68,6 +68,13 @@
               </div>
                 <a href="{% url 'select_processes' project.id %}">Select Required Processes</a>
                 | <a href="{% url 'update_progress' project.id %}">Update Progress</a>
+              
+                <form action="{% url 'upload_project_photo' project.id %}" method="post" enctype="multipart/form-data" style="margin-top: 10px;">
+                  {% csrf_token %}
+                  <label for="progress_photo">Upload Progress Image:</label>
+                  <input type="file" name="progress_photo" accept="image/*" required>
+                  <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
               </li>
         {% endfor %}
     </ul>

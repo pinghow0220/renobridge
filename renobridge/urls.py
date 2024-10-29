@@ -34,6 +34,8 @@ urlpatterns = [
     path('expert/dashboard/', views.contractor_dashboard, name='expert_dashboard'),
     path('project/<int:project_id>/select_processes/', views.select_processes, name='select_processes'),
     path('project/<int:project_id>/update_progress/', views.update_progress, name='update_progress'),
+    path('project/<int:project_id>/upload_photo/', views.upload_project_photo, name='upload_project_photo'),
+    path('project/<int:project_id>/photos/', views.view_project_photos, name='view_project_photos'),
 ]
 
 if settings.DEBUG:
