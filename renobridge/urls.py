@@ -36,6 +36,8 @@ urlpatterns = [
     path('project/<int:project_id>/update_progress/', views.update_progress, name='update_progress'),
     path('project/<int:project_id>/upload_photo/', views.upload_project_photo, name='upload_project_photo'),
     path('project/<int:project_id>/photos/', views.view_project_photos, name='view_project_photos'),
+    path('project/<int:project_id>/update_expense/', views.update_expense, name='update_expense'),
+    path('project/<int:project_id>/expenses/', views.view_expenses, name='view_expenses'),
 ]
 
 if settings.DEBUG:

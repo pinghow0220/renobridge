@@ -68,6 +68,8 @@
               </div>
                 <a href="{% url 'select_processes' project.id %}">Select Required Processes</a>
                 | <a href="{% url 'update_progress' project.id %}">Update Progress</a>
+                | <a href="{% url 'update_expense' project.id %}">Update Expense</a> 
+                | <a href="{% url 'view_expenses' project.id %}">View Expenses</a>
               
                 <form action="{% url 'upload_project_photo' project.id %}" method="post" enctype="multipart/form-data" style="margin-top: 10px;">
                   {% csrf_token %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Expenses</title>
+</head>
+<body>
+    <h2>Project Expense Monitoring</h2>
+<p><strong>Budget Allocated:</strong> RM {{ project.budget_allocated }}</p>
+<p><strong>Total Expenses Spent:</strong> RM {{ project.expenses_spent }}</p>
+<p><strong>Budget Remaining:</strong> 
+    {% if budget_remaining is not None %}
+        RM {{ budget_remaining|floatformat:2 }}
+    {% else %}
+        N/A
+    {% endif %}
+</p>
+
+<h3>Past Expenses:</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Amount (RM)</th>
+            <th>Category</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.item }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>{{ expense.category }}</td>
+            <td>{{ expense.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

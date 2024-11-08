@@ -4,9 +4,9 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
-from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project
+from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense
 from django.shortcuts import get_object_or_404
-from .forms import ContractorProfileForm, HomeownerForm, ProposalForm, ProcessSelectionForm
+from .forms import ContractorProfileForm, HomeownerForm, ProposalForm, ProcessSelectionForm, ExpenseForm
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseForbidden
@@ -530,3 +530,34 @@ def view_project_photos(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
     return render(request, 'view_project_photos.html', {'project': project})
+
+# View for contractors to update expenses
+def update_expense(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            expense = form.save(commit=False)
+            expense.project = project
+            expense.save()
+            # Update the project's expenses spent
+            project.expenses_spent += expense.amount
+            project.save()
+            return redirect('expert_dashboard')  # Redirect to a relevant page
+
+    else:
+        form = ExpenseForm()
+    
+    return render(request, 'update_expense.html', {'form': form, 'project': project})
+
+# View for homeowners to see expenses
+def view_expenses(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    expenses = project.expenses.all()
+    budget_remaining = project.budget_allocated - project.expenses_spent if project.budget_allocated and project.expenses_spent else None
+    
+    return render(request, 'view_expenses.html',{
+        'project': project,
+        'expenses': expenses,
+        'budget_remaining': budget_remaining
+    })
