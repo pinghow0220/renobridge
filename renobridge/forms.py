@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contractor, Homeowner, CollaborationRequest
+from .models import Contractor, Homeowner, CollaborationRequest, Expense
 
 class ContractorProfileForm(forms.ModelForm):
     class Meta:
@@ -46,3 +46,8 @@ class ProcessSelectionForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=True
     )
+
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = ['item', 'amount', 'category']

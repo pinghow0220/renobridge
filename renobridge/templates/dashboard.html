@@ -60,10 +60,15 @@
                     <!-- Placeholder for Pie Chart -->
                     <span>&#9716;</span> <!-- Placeholder symbol for pie chart -->
                 </div>
-                <p><strong>Budget Allocated:</strong></p>
-                <p><strong>Expenses Spent:</strong></p>
-                <p><strong>Budget Remaining:</strong></p>
-                <p><strong>Expenses over Budget Percentage:</strong></p>
+                <p><strong>Budget Allocated:</strong> RM {{ project.budget_allocated }}</p>
+                <p><strong>Expenses Spent:</strong> RM {{ project.expenses_spent }}</p>
+                <p><strong>Budget Remaining:</strong> 
+                  {% if budget_remaining is not None %}
+                      RM {{ budget_remaining|floatformat:2 }}
+                  {% else %}
+                      N/A
+                  {% endif %}
+              </p>
             </div>
 
             <!-- Project Timeline Monitoring -->
