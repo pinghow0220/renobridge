@@ -15,7 +15,7 @@ urlpatterns = [
     path('expert_profile/<int:id>/', views.expert_profile, name='expert_profile'),  # For expert_profile.html
     path('edit_contractor_profile/<int:id>/', views.edit_contractor_profile, name='edit_contractor_profile'),
     path('experts_input/', views.experts_input, name='experts_input'),  # For experts_input.html
-    path('completion_page/', views.completion_page, name='completion_page'),  # For completion_page.html
+    path('completion_page/<int:project_id>/', views.completion_page, name='completion_page'),
    
     path('myfirst/', views.myfirst, name='myfirst'),  # For myfirst.html
     path('owner_confirmation_list/', views.owner_confirmation_list, name='owner_confirmation_list'),  # For owner_confirmation_list.html
@@ -38,6 +38,7 @@ urlpatterns = [
     path('project/<int:project_id>/photos/', views.view_project_photos, name='view_project_photos'),
     path('project/<int:project_id>/update_expense/', views.update_expense, name='update_expense'),
     path('project/<int:project_id>/expenses/', views.view_expenses, name='view_expenses'),
+    path('download_invoice/<int:project_id>/', views.download_invoice, name='download_invoice'),
 ]
 
 if settings.DEBUG:

@@ -11,6 +11,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseForbidden
 from django import forms
+from collections import defaultdict
+from decimal import Decimal
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 
 
 def renobridge(request):
@@ -496,24 +501,6 @@ def update_progress(request, project_id):
     return render(request, 'update_progress.html', {'form': form, 'project': project})
 
 @login_required
-def dashboard(request):
-    # Assuming each homeowner has a single ongoing project. Adjust accordingly if they have multiple projects.
-    homeowner = get_object_or_404(Homeowner, user=request.user)
-    project = Project.objects.filter(owner=homeowner).first()  # Get the first project, or adjust logic as needed
-
-    if project:
-        remaining_duration = max(project.total_duration - project.duration_spent, 0)
-    else:
-        remaining_duration = 0
-    # Pass the project to the context
-    context = {
-        'project': project,
-        'remaining_duration': remaining_duration,
-    }
-
-    return render(request, 'dashboard.html', context)
-
-@login_required
 def upload_project_photo(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     contractor = get_object_or_404(Contractor, user=request.user)
@@ -561,3 +548,57 @@ def view_expenses(request, project_id):
         'expenses': expenses,
         'budget_remaining': budget_remaining
     })
+
+@login_required
+def dashboard(request):
+    homeowner = get_object_or_404(Homeowner, user=request.user)
+    project = Project.objects.filter(owner=homeowner).first()
+
+    if project:
+        expenses = project.expenses.all()
+
+        # Categorize expenses
+        categorized_expenses = defaultdict(float)
+        for expense in expenses:
+            categorized_expenses[expense.category] += float(expense.amount)
+
+        remaining_duration = max(project.total_duration - project.duration_spent, 0)
+
+        # Redirect to completion page if progress is 100%
+        if project.progress_percentage >= 100:
+            return redirect('completion_page', project_id=project.id)
+
+    else:
+        categorized_expenses = {}
+        remaining_duration = 0
+
+    categorized_expenses = dict(categorized_expenses)
+
+    context = {
+        'project': project,
+        'categorized_expenses': categorized_expenses,
+        'remaining_duration': remaining_duration,
+    }
+
+    return render(request, 'dashboard.html', context)
+
+@login_required
+def completion_page(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    return render(request, 'completion_page.html', {'project': project})
+
+def download_invoice(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    template_path = 'invoice_template.html'
+    context = {'project': project, 'expenses': project.expenses.all()}
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_project_{project.id}.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

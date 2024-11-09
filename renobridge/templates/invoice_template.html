@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        }
+        table {
+            width: 100%;
+            line-height: 24px;
+            text-align: left;
+        }
+        .table-header {
+            background-color: #f2f2f2;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <h2>Invoice for Project {{ project.id }}</h2>
+        <p>Project Name: {{ project.name }}</p>
+        <p>Homeowner: {{ project.owner.user.username }}</p>
+        <p>Date: {{ project.end_date }}</p>
+        
+        <table>
+            <tr class="table-header">
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount (RM)</th>
+            </tr>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.amount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Total: RM {{ project.expenses_spent }}</h3>
+    </div>
+</body>
+</html>
