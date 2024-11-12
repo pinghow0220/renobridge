@@ -66,10 +66,15 @@
                         <option>Pahang</option>
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <label for="fullAddress" class="form-label">3. Enter the full address of your property:</label>
+                    <textarea id="fullAddress" name="full_address" class="form-control" placeholder="Enter your full property address" required></textarea>
+                </div>
             
                 <!-- 3. Property Type -->
                 <div class="mb-3">
-                    <label for="propertyType" class="form-label">3. Select the type of your property:</label>
+                    <label for="propertyType" class="form-label">4. Select the type of your property:</label>
                     <select id="propertyType" class="form-select" name="propertyType">
                         <option>Apartment</option>
                         <option>Condominium</option>
@@ -81,7 +86,7 @@
             
                 <!-- 4. Property Size -->
                 <div class="mb-3">
-                    <label for="propertySize" class="form-label">4. Select the range of your property size (sqft):</label>
+                    <label for="propertySize" class="form-label">5. Select the range of your property size (sqft):</label>
                     <select id="propertySize" class="form-select" name="propertySize">
                         <option>500 - 1000 sqft</option>
                         <option>1000 - 1500 sqft</option>
@@ -92,7 +97,7 @@
             
                 <!-- 5. Preferred Style -->
                 <div class="mb-3">
-                    <label for="preferredStyle" class="form-label">5. Select the preferred style for your project:</label>
+                    <label for="preferredStyle" class="form-label">6. Select the preferred style for your project:</label>
                     <select id="preferredStyle" class="form-select" name="preferredStyle">
                         <option>Modern</option>
                         <option>Minimalist</option>
@@ -103,7 +108,7 @@
             
                 <!-- 6. Services -->
                 <div class="mb-3">
-                    <label class="form-label">6. Select services you require:</label><br>
+                    <label class="form-label">7. Select services you require:</label><br>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="service1" name="services" value="Smart Home Upgrades">
                         <label class="form-check-label" for="service1">Smart Home Upgrades</label>
@@ -140,7 +145,7 @@
             
                 <!-- 7. Budget -->
                 <div class="mb-3">
-                    <label for="budget" class="form-label">7. Select your budget for your project:</label>
+                    <label for="budget" class="form-label">8. Select your budget for your project:</label>
                     <select id="budget" class="form-select" name="budget">
                         <option>RM50,000 - RM100,000</option>
                         <option>RM100,000 - RM200,000</option>
@@ -161,13 +166,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="startDate" class="form-label">8. Select the starting date for your project:</label>
+                    <label for="startDate" class="form-label">9. Select the starting date for your project:</label>
                     <input type="date" id="startDate" name="start_date" class="form-control">
                 </div>
                 
                 <!-- 9. Upload files -->
                 <div class="mb-3">
-                    <label for="uploadFiles" class="form-label">Upload your floor plan, concept drawing, 3D designs if there is any:</label>
+                    <label for="uploadFiles" class="form-label">10. Upload your floor plan, concept drawing, 3D designs if there is any:</label>
                     <input type="file" id="uploadFiles" name="floorplan_img" class="form-control">
                 </div>
             
@@ -179,14 +184,6 @@
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- <script>
-    document.getElementById('ownerInputForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
-
-        // Redirect the user to the expert_list.html page
-        window.location.href = "{% url 'expert_list' %}";
-    });
-</script> -->
 
 </body>
 </html>

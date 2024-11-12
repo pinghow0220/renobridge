@@ -39,6 +39,7 @@ urlpatterns = [
     path('project/<int:project_id>/update_expense/', views.update_expense, name='update_expense'),
     path('project/<int:project_id>/expenses/', views.view_expenses, name='view_expenses'),
     path('download_invoice/<int:project_id>/', views.download_invoice, name='download_invoice'),
+    path('submit_review/<int:project_id>/', views.submit_review, name='submit_review'),
 ]
 
 if settings.DEBUG:

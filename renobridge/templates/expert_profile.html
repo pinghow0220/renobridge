@@ -59,8 +59,20 @@
                       <button type="submit" class="btn btn-primary mt-2">Save Logo</button>
                   </div>
               </div>
-              <div>
-                <span class="rating">★★★★★ (0)</span>
+              <!-- Rating Section -->
+              <div class="rating mt-2">
+                <p class="mb-1">
+                    {% with avg_rating|floatformat:0 as avg %}
+                        {% for i in "12345" %}
+                            {% if i <= avg %}
+                                <i class="fas fa-star text-warning" style="font-size: 1.2rem;"></i> <!-- Full star -->
+                            {% else %}
+                                <i class="far fa-star text-warning" style="font-size: 1.2rem;"></i> <!-- Empty star -->
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    <span class="text-muted">({{ contractor.reviews.count }})</span>
+                </p>
               </div>
           </form>  
             <!-- Profile Information -->
@@ -101,6 +113,22 @@
             {% endfor %}
         </div>
       </div>
+
+      <hr>
+      <div class="reviews mt-4">
+        <h4>Reviews</h4>
+        {% for review in contractor.reviews.all %}
+        <div class="review card mb-3 p-2 shadow-sm" style="max-width: 500px; margin: 0 auto;">
+            <div class="card-body" style="padding: 10px;">
+                <h6 class="card-title mb-1"><strong>{{ review.homeowner.user.username }}</strong> - Rated: {{ review.rating }} / 5</h6>
+                <p class="card-text mb-2" style="font-size: 14px;">{{ review.review }}</p>
+                <p class="card-footer text-muted" style="font-size: 12px;"><small>Reviewed on: {{ review.created_at|date:"M. d, Y, g:i a" }}</small></p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No reviews yet.</p>
+        {% endfor %}
+    </div>
       
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
