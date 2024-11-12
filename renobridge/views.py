@@ -1,10 +1,10 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
-from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense
+from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense, Review
 from django.shortcuts import get_object_or_404
 from .forms import ContractorProfileForm, HomeownerForm, ProposalForm, ProcessSelectionForm, ExpenseForm
 from django.core.mail import send_mail
@@ -15,6 +15,10 @@ from collections import defaultdict
 from decimal import Decimal
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.utils import timezone
+from django.contrib import messages
+from django.db.models import Avg
+
 
 
 
@@ -48,12 +52,22 @@ def expert_portfolio(request, id):
 
     # Fetch all uploaded photos by the contractor
     project_photos = ProjectPhoto.objects.filter(contractor=contractor)
-    print(f"Photos count: {project_photos.count()}")
-    
+
+    # Fetch reviews for the contractor
+    reviews = contractor.reviews.all()
+
+    # Calculate the average rating
+    avg_rating = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+    avg_rating = avg_rating if avg_rating is not None else 0  # Default to 0 if no ratings exist
+
     context = {
         'contractor': contractor,
-        'project_photos': project_photos
+        'project_photos': project_photos,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'range': range(1, 6)  # Adding a range for the loop (from 1 to 5)
     }
+
     return render(request, 'expert_portfolio.html', context)
 
 
@@ -76,12 +90,18 @@ def expert_profile(request, id):
 
     # Fetch all uploaded photos by the contractor
     project_photos = ProjectPhoto.objects.filter(contractor=contractor)
-    print(f"Photos count: {project_photos.count()}")
     
+    # Fetch all reviews and calculate average rating
+    reviews = contractor.reviews.all()
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+
     context = {
         'contractor': contractor,
-        'project_photos': project_photos
+        'project_photos': project_photos,
+        'reviews': reviews,
+        'avg_rating': avg_rating
     }
+    
     return render(request, 'expert_profile.html', context)
 
 
@@ -134,6 +154,7 @@ def owner_input(request):
     if request.method == 'POST':
         full_name = request.POST.get('fullName', '')
         location = request.POST.get('location', '')
+        full_address = request.POST.get('full_address')
         property_type = request.POST.get('propertyType', '')
         property_size = request.POST.get('propertySize', '')
         preferred_style = request.POST.get('preferredStyle', '')
@@ -144,7 +165,7 @@ def owner_input(request):
         floorplan_img = request.FILES.get('floorplan_img', None)
 
         # Check that all fields are not empty
-        if not (full_name and location and property_type and property_size and preferred_style and start_date):
+        if not (full_name and location and full_address and property_type and property_size and preferred_style and start_date):
             return render(request, 'owner_input.html', {
                 'error': 'All fields are required.'
             })
@@ -156,6 +177,7 @@ def owner_input(request):
             # Update homeowner fields
             homeowner.full_name = full_name
             homeowner.location = location
+            homeowner.full_address = full_address
             homeowner.property_type = property_type
             homeowner.property_size = property_size
             homeowner.preferred_style = preferred_style
@@ -589,9 +611,39 @@ def completion_page(request, project_id):
 
 def download_invoice(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    template_path = 'invoice_template.html'
-    context = {'project': project, 'expenses': project.expenses.all()}
+    homeowner = project.owner  # Assuming `Project` has a ForeignKey to `Homeowner`
+    contractor = project.contractor  # Assuming `Project` has a ForeignKey to `Contractor`
+    expenses = project.expenses.all()
 
+    # Create a numbered list for the expenses
+    expenses_data = []
+    for index, expense in enumerate(expenses, start=1):
+        expenses_data.append({
+            'no': index,
+            'item': expense.item,  # Assuming you have a field for item name in the expense model
+            'category': expense.category,
+            'amount': expense.amount,
+        })
+
+    # Generate an invoice number
+    invoice_number = f"INV-{project.id:04d}-{timezone.now().strftime('%Y%m%d')}"
+
+    # Prepare context for rendering PDF
+    context = {
+        'project': project,
+        'expenses': expenses_data,
+        'total': sum(Decimal(exp.amount) for exp in expenses),
+        'full_name': homeowner.full_name,
+        'full_address': homeowner.full_address,
+        'date': timezone.now().strftime('%Y-%m-%d'),  # Current date for invoice
+        'invoice_number': invoice_number,
+        'company_name': contractor.company_name,
+        'company_address': contractor.company_address,
+        'company_email': contractor.email_address,
+    }
+
+    # Generate PDF
+    template_path = 'invoice_template.html'
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="invoice_project_{project.id}.pdf"'
 
@@ -602,3 +654,30 @@ def download_invoice(request, project_id):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+@login_required
+def submit_review(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    contractor = project.contractor
+
+    if request.method == "POST":
+        rating = int(request.POST.get('rating', 0))
+        review_text = request.POST.get('review', '')
+
+        # Create and save the review
+        review = Review.objects.create(
+            contractor=contractor,
+            homeowner=request.user.homeowner,
+            rating=rating,
+            review=review_text
+        )
+
+        # Update the contractor's average rating
+        all_ratings = Review.objects.filter(contractor=contractor).values_list('rating', flat=True)
+        contractor.average_rating = sum(all_ratings) / len(all_ratings)
+        contractor.save()
+
+        messages.success(request, "Thank you for submitting your review!")
+        return redirect('dashboard')
+
+    return HttpResponse("Invalid request", status=400)

@@ -26,27 +26,55 @@
 </head>
 <body>
     <div class="invoice-box">
-        <h2>Invoice for Project {{ project.id }}</h2>
-        <p>Project Name: {{ project.name }}</p>
-        <p>Homeowner: {{ project.owner.user.username }}</p>
-        <p>Date: {{ project.end_date }}</p>
+        <h2 style="text-align: center;">INVOICE FOR PROJECT {{ project.id }}</h2>
+        <p><b>Invoice Number:</b> {{ invoice_number }}</p>
         
-        <table>
-            <tr class="table-header">
-                <th>Description</th>
-                <th>Category</th>
-                <th>Amount (RM)</th>
-            </tr>
-            {% for expense in expenses %}
+        <!-- Table for Company and Project Information -->
+        <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
             <tr>
-                <td>{{ expense.description }}</td>
-                <td>{{ expense.category }}</td>
-                <td>{{ expense.amount }}</td>
+                <!-- Company Information Column -->
+                <td style="width: 50%; vertical-align: top; padding: 10px; border: 1px solid #ddd;">
+                    <h3><u>Company Information</u></h3>
+                    <p><b>Company Name:</b> {{ company_name }}</p>
+                    <p><b>Company Address:</b> {{ company_address }}</p>
+                    <p><b>Company Email:</b> {{ company_email }}</p>
+                </td>
+    
+                <!-- Homeowner and Project Information Column -->
+                <td style="width: 50%; vertical-align: top; padding: 10px; border: 1px solid #ddd;">
+                    <h3><u>Project Information</u></h3>
+                    <p><b>Homeowner:</b> {{ full_name }}</p>
+                    <p><b>Address:</b> {{ full_address }}</p>
+                    <p><b>Date:</b> {{ date }}</p>
+                </td>
             </tr>
-            {% endfor %}
         </table>
-
-        <h3>Total: RM {{ project.expenses_spent }}</h3>
+    
+        <hr>
+    
+        <!-- Table for Expense Details -->
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="width: 5%; padding: 8px; border: 1px solid #ddd;">No</th>
+                    <th style="width: 30%; padding: 8px; border: 1px solid #ddd;">Item</th>
+                    <th style="width: 25%; padding: 8px; border: 1px solid #ddd;">Category</th>
+                    <th style="width: 20%; padding: 8px; border: 1px solid #ddd;">Amount (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td style="padding: 5px; border: 1px solid #ddd;">{{ expense.no }}</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">{{ expense.item }}</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">{{ expense.category }}</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">{{ expense.amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p><strong>Total Amount (RM):</strong> {{ total }}</p>
     </div>
+    
 </body>
 </html>

@@ -15,6 +15,7 @@ class Homeowner(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
+    full_address = models.TextField(max_length=400)
     property_type = models.CharField(max_length=100)
     property_size = models.CharField(max_length=100)
     preferred_style = models.CharField(max_length=100)
@@ -35,6 +36,7 @@ class Contractor(models.Model):
     preferred_location = models.CharField(max_length=100)
     services_provided = models.TextField()  # Store services as comma-separated values
     expertise_styles = models.TextField()  # Store expertise styles as comma-separated values
+    average_rating = models.FloatField(default=0.0)
 
 class ProjectPhoto(models.Model):
     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
@@ -91,3 +93,10 @@ def create_profile(sender, instance, created, **kwargs):
             Homeowner.objects.create(user=instance)
         elif instance.user_type == 'contractor':
             Contractor.objects.create(user=instance)
+
+class Review(models.Model):
+    contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE, related_name='reviews')
+    homeowner = models.ForeignKey(Homeowner, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField()
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
