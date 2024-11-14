@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame sticky-top">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">RenoBridge</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Services</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="#">Experts</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link disabled" href="#">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="{% url 'compare_proposals' %}">Proposals</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">About Us</a>
@@ -46,11 +46,49 @@
             
             <!-- Right Section (Images) -->
             <div class="col-lg-6 d-flex justify-content-center position-relative">
-                <img src="https://ispydiy.com/wp-content/uploads/2022/07/ispydiy_Lofthouse_exterior1-1447x2000.jpg" alt="Kitchen" width="350px" class="img-fluid rounded shadow-lg">
-                <img src="{% static 'cover_photo.webp' %}" alt="Living Room" width="300px" class="img-fluid rounded shadow-lg position-absolute" style="bottom: -50px; right: -25px;">
+                <img src="https://www.mobelinteriors.in/images/1695810787-img2-banner-blog-1a.jpg" alt="Kitchen" style="width:650px;height:500px;margin-left:20px;margin-top:10px;" class="img-fluid rounded shadow-lg">
             </div>
         </div>
     </div>
+
+    <div class="container" style="max-width: 1200px; margin-top: 150px; margin-bottom: 50px;">
+      <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+          <div class="col">
+            <a href="{% url 'tips01' %}" class="text-decoration-none text-dark">
+              <div class="card h-100" style="width: 100%; margin: 0 auto;">
+                  <img src="https://progressivedesignbuild.com/wp-content/uploads/2022/01/home-remodel-phases_315096632.jpg" class="card-img-top" alt="home renovation phases">
+                  <div class="card-body">
+                      <h5 class="card-title">Phases of Home Renovation</h5>
+                      <p class="card-text">Most of the time, homeowners may be suffering from these tedious steps to get things done. Five main phases can be summarized.</p>
+                  </div>
+              </div>
+            </a>
+          </div>
+          <div class="col">
+            <a href="{% url 'tips02' %}" class="text-decoration-none text-dark">
+              <div class="card h-100" style="width: 100%; margin: 0 auto;">
+                  <img src="https://www.testreach.com/images/blog/full/5-trends-in-assessment.jpg" class="card-img-top" alt="recent trends in home renovation">
+                  <div class="card-body">
+                      <h5 class="card-title">Recent Trends in Home Renovation</h5>
+                      <p class="card-text">Nowadays, humans’ preferences and tastes change rapidly from time to time, as do their requirements in home renovation.</p>
+                  </div>
+              </div>
+            </a>
+          </div>
+          <div class="col">
+            <a href="{% url 'tips03' %}" class="text-decoration-none text-dark">
+              <div class="card h-100" style="width: 100%; margin: 0 auto;">
+                  <img src="https://www.azmilaw.com/wp-content/uploads/2021/09/Participation-of-Foreign-Contractors-in-Construction-Projects-in-Malaysia.jpg" class="card-img-top" alt="contractors">
+                  <div class="card-body">
+                      <h5 class="card-title">Importance of Home Renovation</h5>
+                      <p class="card-text">Renovating a home is an important investment that has several advantages, especially for homeowners. </p>
+                  </div>
+              </div>
+            </a>
+          </div>
+      </div>
+  </div>
+  
       
 
 

@@ -25,6 +25,15 @@ from django.db.models import Avg
 def renobridge(request):
     return render(request, 'index.html')
 
+def tips01(request):
+    return render(request, 'tips01.html')
+
+def tips02(request):
+    return render(request, 'tips02.html')
+
+def tips03(request):
+    return render(request, 'tips03.html')
+
 def expert_list(request):
     try:
         # Assuming the logged-in user is a homeowner
