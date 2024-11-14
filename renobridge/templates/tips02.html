@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Trends in Home Renovation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Experts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="{% url 'compare_proposals' %}">Proposals</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About Us</a>
+              </li>
+            </ul>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary ms-auto">Log In</a>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+
+        <!-- Technology Integration Section -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4 text-primary">Technology Integration</h2>
+                <p class="card-text">
+                    When mentioning technology, it will not be unfamiliar for us to think about smart home systems.
+                    Microcontrollers and cell phones are frequently used to operate these systems, and for increased
+                    functionality, they can be coupled with cloud computing and Internet of Things services. A growing
+                    number of homeowners are installing energy-efficient, convenient, and secure appliances for their homes,
+                    like voice-activated assistants, smart lighting, security cameras, and thermostats.
+                </p>
+                <div class="text-center mb-4">
+                    <img src="https://www.alembicrealestate.com/wp-content/uploads/2023/10/2-8.webp" alt="Technology Integration" style="width: 500px;" class="img-fluid rounded shadow">
+                </div>
+                <p class="card-text">
+                    The evolution of Internet of Things (IoT) devices has successfully made most of the electronic items in
+                    homes automotive. Through wireless sensor networks and the Internet, the IoT makes it possible for
+                    gadgets in smart homes or other smart systems to connect with one another more effectively. This
+                    has made them a consideration for homeowners in the planning of their renovations.
+                </p>
+                <div class="text-center mb-4">
+                    <img src="https://analytika.com/wp-content/uploads/2024/06/Tips-to-Control-Energy-Consumption-01-0603070002.jpg" alt="Technology Integration" style="width: 500px;" class="img-fluid rounded shadow">
+                </div>
+                <p class="card-text">
+                    Furthermore, increasing numbers of homeowners have started realizing the way to make use of technology in
+                    assisting them to reduce energy consumption. This could eventually benefit them in the long run. For
+                    instance, smart energy meters can improve energy management and control substantially, resulting in
+                    energy savings and greater convenience by utilizing real-time data and remote access. In addition,
+                    there are plenty of energy management systems with a common goal that assist homeowners in managing and
+                    controlling their energy consumption, as well as in reducing energy losses from large appliances,
+                    heating, cooling, and lighting, and improving performance.
+                </p>
+            </div>
+        </div>
+    
+        <!-- Design Trends Section -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4 text-primary">Design Trends</h2>
+                <p class="card-text">
+                    Regardless of the type and size of the property, most homeowners always give all their effort into the
+                    design so that it matches their preferences and senses. Even within the limitations of the usual
+                    narrow-fronted terrace buildings, homeowners are still able to express their stylistic preferences.
+                    Modern home design has been greatly impacted by the idea of minimalism, which emphasizes utility,
+                    uniformity, and simplicity. One of the essential components of minimalist design is color palette in
+                    Neutral Tones. It's common to employ a monochromatic or neutral color scheme to convey peace and
+                    tranquillity. Shades of white, beige, grey, or blue can be included in this.
+                </p>
+                <div class="text-center mb-4">
+                    <img src="https://assets-news.housing.com/news/wp-content/uploads/2022/02/18212541/Minimalist-interior-design-Tips-to-make-your-home-look-minimal-06.jpg" alt="Minimalist Interior Design" style="width: 900px;" class="img-fluid rounded shadow">
+                </div>
+                <p class="card-text">
+                    Nevertheless, the demand for the use of natural elements has also risen throughout the years. In addition
+                    to their impressive visual look, it highlights the advantages of utilizing natural materials for
+                    conventional home reconstruction, especially regarding the efficiency of energy and environmental
+                    effects. Thus, it has been proven that stress reduction and well-being are encouraged by this
+                    ecologically friendly design movement.
+                </p>
+                <div class="text-center mb-4">
+                    <img src="https://www.kunstloft.com/wordpress/en_UK/eu/wp-content/uploads/2023/11/incorporating-natural-elements-in-your-home-design-1.jpg" alt="Natural Elements in Design" style="width: 900px;" class="img-fluid rounded shadow">
+                </div>
+                <p class="card-text">
+                    Although the interior design market is dominated by the minimalistic look, bold accents might be favorable
+                    to certain homeowners. While preserving the general simplicity and elegance of the minimalist design,
+                    these accents are carefully placed throughout areas to offer personality and visual interest. Some of
+                    the practices include rich accents of color, statement lighting, vibrant backsplashes, and unique
+                    fixtures.
+                </p>
+                <div class="text-center mb-4">
+                    <img src="https://bondsdecor.ca/cdn/shop/articles/spacejoy-KSfe2Z4REEM-unsplash.jpg?v=1715704874" alt="Bold Accent Design" style="width: 900px;" class="img-fluid rounded shadow">
+                </div>
+                <p class="card-text">
+                    It is crucial to take note that the trends described above were just the tip of the iceberg. The trends are
+                    evolving rapidly and there are many other potential leading trends in the future such as color drenching,
+                    vintage accents, and multi-purpose spaces. Thus, renovation experts have a vital role in keeping
+                    their work and enhancing their ability to adapt to the rapidly changing requirements of homeowners.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

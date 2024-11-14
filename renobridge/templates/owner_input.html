@@ -18,9 +18,6 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Services</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="#">Experts</a>
               </li>
               <li class="nav-item">
@@ -42,14 +39,14 @@
                 {% csrf_token %}
                 
                 <!-- Full Name -->
-                <div class="mb-3">
-                    <label for="fullName" class="form-label">1. Enter your full name:</label>
+                <div class="mb-3 mt-3">
+                    <label for="fullName" class="form-label"><b>1. Enter your full name:</b></label>
                     <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter your full name" required>
                 </div>
             
                 <!-- 2. Property Location -->
                 <div class="mb-3">
-                    <label for="location" class="form-label">2. Select the location of your property:</label>
+                    <label for="location" class="form-label"><b>2. Select the location of your property:</b></label>
                     <select id="location" class="form-select" name="location">
                         <option>Selangor</option>
                         <option>Kuala Lumpur</option>
@@ -68,13 +65,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="fullAddress" class="form-label">3. Enter the full address of your property:</label>
+                    <label for="fullAddress" class="form-label"><b>3. Enter the full address of your property:</b></label>
                     <textarea id="fullAddress" name="full_address" class="form-control" placeholder="Enter your full property address" required></textarea>
                 </div>
             
                 <!-- 3. Property Type -->
                 <div class="mb-3">
-                    <label for="propertyType" class="form-label">4. Select the type of your property:</label>
+                    <label for="propertyType" class="form-label"><b>4. Select the type of your property:</b></label>
                     <select id="propertyType" class="form-select" name="propertyType">
                         <option>Apartment</option>
                         <option>Condominium</option>
@@ -86,7 +83,7 @@
             
                 <!-- 4. Property Size -->
                 <div class="mb-3">
-                    <label for="propertySize" class="form-label">5. Select the range of your property size (sqft):</label>
+                    <label for="propertySize" class="form-label"><b>5. Select the range of your property size (sqft):</b></label>
                     <select id="propertySize" class="form-select" name="propertySize">
                         <option>500 - 1000 sqft</option>
                         <option>1000 - 1500 sqft</option>
@@ -97,7 +94,7 @@
             
                 <!-- 5. Preferred Style -->
                 <div class="mb-3">
-                    <label for="preferredStyle" class="form-label">6. Select the preferred style for your project:</label>
+                    <label for="preferredStyle" class="form-label"><b>6. Select the preferred style for your project:</b></label>
                     <select id="preferredStyle" class="form-select" name="preferredStyle">
                         <option>Modern</option>
                         <option>Minimalist</option>
@@ -108,7 +105,7 @@
             
                 <!-- 6. Services -->
                 <div class="mb-3">
-                    <label class="form-label">7. Select services you require:</label><br>
+                    <label class="form-label"><b>7. Select services you require:</b></label><br>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="service1" name="services" value="Smart Home Upgrades">
                         <label class="form-check-label" for="service1">Smart Home Upgrades</label>
@@ -145,34 +142,40 @@
             
                 <!-- 7. Budget -->
                 <div class="mb-3">
-                    <label for="budget" class="form-label">8. Select your budget for your project:</label>
+                    <label for="budget" class="form-label"><b>8. Select your budget for your project:</b></label>
                     <select id="budget" class="form-select" name="budget">
+                        <option>Below RM1000</option>
+                        <option>RM1000 - RM10,000</option>
                         <option>RM50,000 - RM100,000</option>
                         <option>RM100,000 - RM200,000</option>
                         <option>RM200,000 - RM300,000</option>
                         <option>RM300,000 - RM500,000</option>
+                        <option>Above RM500,000</option>
                     </select>
                 </div>
             
                 <!-- 8. Duration -->
                 <div class="mb-3">
-                    <label for="duration" class="form-label">8. Select your expected duration for your project:</label>
+                    <label for="duration" class="form-label"><b>9. Select your expected duration for your project:</b></label>
                     <select id="duration" class="form-select" name="duration">
+                        <option>Less than 1 month</option>
                         <option>1 month</option>
                         <option>2 months</option>
                         <option>3 months</option>
-                        <option>6 months</option>
+                        <option>4-6 months</option>
+                        <option>6-12 months</option>
+                        <option>more than 1 year</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="startDate" class="form-label">9. Select the starting date for your project:</label>
+                    <label for="startDate" class="form-label"><b>10. Select the preffered starting date for your project:</b></label>
                     <input type="date" id="startDate" name="start_date" class="form-control">
                 </div>
                 
                 <!-- 9. Upload files -->
                 <div class="mb-3">
-                    <label for="uploadFiles" class="form-label">10. Upload your floor plan, concept drawing, 3D designs if there is any:</label>
+                    <label for="uploadFiles" class="form-label"><b>11. Upload your floor plan, concept drawing, 3D designs if there is any:</b></label>
                     <input type="file" id="uploadFiles" name="floorplan_img" class="form-control">
                 </div>
             
