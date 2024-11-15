@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame sticky-top">
         <div class="container-fluid" style="background-color: white;">
           <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,10 +18,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link disabled" href="#">Dashboard</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
+                <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
               </li>
             </ul>
           </div>
@@ -34,22 +34,22 @@
             {% csrf_token %}
             <div class="form-section">
                 <div class="mb-3">
-                    <label for="companyName" class="form-label">1. State your company's name:</label>
+                    <label for="companyName" class="form-label"><b>1. State your company's name:</b></label>
                     <input type="text" class="form-control" id="companyName" name="companyName" placeholder="company name">
                 </div>
 
                 <div class="mb-3">
-                    <label for="companyAddress" class="form-label">2. State your company's address:</label>
+                    <label for="companyAddress" class="form-label"><b>2. State your company's address:</b></label>
                     <input type="text" class="form-control" id="companyAddress" name="companyAddress" placeholder="address">
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">3. State your company's email address:</label>
+                    <label for="email" class="form-label"><b>3. State your company's email address:</b></label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="email address">
                 </div>
 
                 <div class="mb-3">
-                    <label for="yearsOfExperience" class="form-label">4. State your years of experience:</label>
+                    <label for="yearsOfExperience" class="form-label"><b>4. State your years of experience:</b></label>
                     <select class="form-select" id="yearsOfExperience" name="yearsOfExperience">
                         <option selected>less than 5</option>
                         <option value="2">5-10</option>
@@ -60,12 +60,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="description" class="form-label">5. Write a brief description about your company:</label>
+                    <label for="description" class="form-label"><b>5. Write a brief description about your company:</b></label>
                     <textarea class="form-control" id="description" name="description" rows="3" placeholder="Description"></textarea>
                 </div>
 
                 <div class="mb-3">
-                    <label for="location" class="form-label">6. Select your preferred working location:</label>
+                    <label for="location" class="form-label"><b>6. Select your preferred working location:</b></label>
                     <select id="location" name="location" class="form-select">
                         <option>Selangor</option>
                         <option>Kuala Lumpur</option>
@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">7. Select type(s) of your services:</label>
+                    <label class="form-label"><b>7. Select type(s) of your services:</b></label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="service1" name="services" value="Smart Home Upgrades" checked>
                         <label class="form-check-label" for="service1">Smart Home Upgrades</label>
@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">8. Select your expertise styles:</label>
+                    <label class="form-label"><b>8. Select your expertise styles:</b></label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="style1" name="expertise_styles" value="Minimalist" checked>
                         <label class="form-check-label" for="style1">Minimalist</label>
@@ -136,6 +136,14 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="style4" name="expertise_styles" value="Traditional">
                         <label class="form-check-label" for="style4">Traditional</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="style5" name="expertise_styles" value="Natural Elements">
+                        <label class="form-check-label" for="style4">Natural Elements</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="style6" name="expertise_styles" value="Bold Accents">
+                        <label class="form-check-label" for="style4">Bold Accents</label>
                     </div>
                 </div>
 

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame sticky-top">
         <div class="container-fluid" style="background-color: white;">
           <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="#">Experts</a>
+                <a class="nav-link" href="{% url 'expert_list' %}">Experts</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
+                <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
               </li>
             </ul>
           </div>
@@ -85,10 +85,12 @@
                 <div class="mb-3">
                     <label for="propertySize" class="form-label"><b>5. Select the range of your property size (sqft):</b></label>
                     <select id="propertySize" class="form-select" name="propertySize">
+                        <option>less than 500 sqft</option>
                         <option>500 - 1000 sqft</option>
                         <option>1000 - 1500 sqft</option>
                         <option>1500 - 2000 sqft</option>
                         <option>2000 - 2500 sqft</option>
+                        <option>more than 2500 sqft</option>
                     </select>
                 </div>
             
@@ -100,6 +102,8 @@
                         <option>Minimalist</option>
                         <option>Industrial</option>
                         <option>Traditional</option>
+                        <option>Natural Elements</option>
+                        <option>Bold Accents</option>
                     </select>
                 </div>
             

@@ -18,6 +18,7 @@ from xhtml2pdf import pisa
 from django.utils import timezone
 from django.contrib import messages
 from django.db.models import Avg
+from django.db import IntegrityError
 
 
 
@@ -34,20 +35,27 @@ def tips02(request):
 def tips03(request):
     return render(request, 'tips03.html')
 
+def about_us(request):
+    return render(request, 'about_us.html')
+
 def expert_list(request):
     try:
         # Assuming the logged-in user is a homeowner
         homeowner = Homeowner.objects.get(user=request.user)
 
-        # Find matching contractors
+        # Find matching contractors based on homeowner preferences
         matching_contractors = Contractor.objects.filter(
             preferred_location=homeowner.location,
             expertise_styles__icontains=homeowner.preferred_style,
             services_provided__icontains=homeowner.services_required
         )
 
+        # Get all contractors excluding the matching ones
+        all_contractors = Contractor.objects.exclude(id__in=matching_contractors)
+
         context = {
-            'matching_contractors': matching_contractors
+            'matching_contractors': matching_contractors,
+            'all_contractors': all_contractors,
         }
         return render(request, 'expert_list.html', context)
 
@@ -228,31 +236,55 @@ def expert_dashboard(request):
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        confirm_password = request.POST.get('confirm_password')
-        user_type = request.POST['userType']  # Homeowner or Contractor
+        username = request.POST.get('username', '')
+        email = request.POST.get('email', '')
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        user_type = request.POST.get('userType', '')  # Homeowner or Contractor
 
+        # Check for missing fields
+        if not (username and email and password and confirm_password and user_type):
+            return render(request, 'register.html', {
+                'error': 'All fields are required.',
+                'username': username,
+                'email': email,
+                'user_type': user_type,
+            })
+
+        # Check for password mismatch
         if password != confirm_password:
-            # If passwords do not match, return an error message
-            return render(request, 'register.html', {'error': 'Passwords do not match'})
+            return render(request, 'register.html', {
+                'error': 'Passwords do not match.',
+                'username': username,
+                'email': email,
+                'user_type': user_type,
+            })
 
-        # Create user
-        user = CustomUser.objects.create_user(username=username, email=email, password=password)
-        user.user_type = user_type  # Set user_type
-        user.save()
+        # Try to create a user
+        try:
+            user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            user.user_type = user_type  # Set user_type
+            user.save()
 
-        # Log the user in
-        auth_login(request, user)
+            # Log the user in
+            auth_login(request, user)
 
-        # Redirect based on user type
-        if user_type == 'homeowner':
-            return redirect('owner_input')
-        elif user_type == 'contractor':
-            return redirect('experts_input')
-    else:
-        return render(request, 'register.html')
+            # Redirect based on user type
+            if user_type == 'homeowner':
+                return redirect('owner_input')
+            elif user_type == 'contractor':
+                return redirect('experts_input')
+
+        except IntegrityError:
+            # Handle the case when the username already exists
+            return render(request, 'register.html', {
+                'error': 'Username has already been used. Please choose a different one.',
+                'username': username,
+                'email': email,
+                'user_type': user_type,
+            })
+
+    return render(request, 'register.html')
 
     
 class CustomLoginView(LoginView):

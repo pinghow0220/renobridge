@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame sticky-top">
     <div class="container-fluid" style="background-color: white;">
       <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@
                       <strong>Budget:</strong> {{ invitation.homeowner.budget }}<br>
                       <strong>Duration:</strong> {{ invitation.homeowner.duration }}<br>
                       <strong>Preferred Start Date:</strong> {{ invitation.homeowner.start_date }}<br>
+                      <strong>Property Size: </strong>{{ invitation.homeowner.property_size}}<br>
                       {% if invitation.homeowner.floorplan_img %}
                       <strong>Floorplan:</strong>
                       <a href="{{ invitation.homeowner.floorplan_img.url }}" target="_blank">View Floorplan</a><br>
