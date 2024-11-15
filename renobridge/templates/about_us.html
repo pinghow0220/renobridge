@@ -1,0 +1,99 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - RenoBridge</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .hero-section {
+            background: url('https://d1hy6t2xeg0mdl.cloudfront.net/image/773950/059cd714b7/standard') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .mission-section {
+            padding: 40px 20px;
+        }
+        .mission-section h2 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-frame sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'renobridge' %}">RenoBridge</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Experts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="{% url 'compare_proposals' %}">Proposals</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
+              </li>
+            </ul>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary ms-auto">Log In</a>
+          </div>
+        </div>
+      </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Welcome to RenoBridge</h1>
+            <p>Your trusted partner in home renovation.</p>
+        </div>
+    </div>
+
+    <div class="mission-section container">
+        <h2>Our Mission</h2>
+        <p>
+            RenoBridge is dedicated to transforming your home renovation journey into a smooth and delightful experience. 
+            We understand how challenging renovations can be — from setting goals to finding the right contractors. Our mission is to bring 
+            homeowners and trusted renovation professionals together, offering a seamless, organized platform to ensure each renovation project 
+            is handled efficiently, within budget, and meets your dream expectations.
+        </p>
+        <p>
+            At RenoBridge, we are bridging the gap between homeowners and expert contractors, enabling personalized recommendations, streamlined project management, 
+            and transparent communication every step of the way.
+        </p>
+    </div>
+
+    <div class="container mb-5">
+        <h2>Why Choose RenoBridge?</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Personalized Contractor Recommendations:</strong> Based on your location, style, and needs, we match you with the most suitable contractors.</li>
+            <li class="list-group-item"><strong>Organized Rating and Review Feature:</strong> Ratings and reviews by past consumer will be displayed for you to make informed decisions.</li>
+            <li class="list-group-item"><strong>Direct Proposal Comparisons:</strong> Receive a list of proposals presented by different contractors, looking directly on the costs and timeline proposed.</li>
+            <li class="list-group-item"><strong>Anti-Spam and Enhanced Privacy:</strong> Contact num are not needed, contractors will not be able to directly reach owners initially, any updates will be performed officially in emails.</li>
+            <li class="list-group-item"><strong>Progress Tracking & Monitoring:</strong> Monitor your project's progress and view the photos of the latest progress without needing to physically visit the site.</li>
+            <li class="list-group-item"><strong>Expense Monitoring & Transparency:</strong> Keep track of renovation expenses and download the invoice with a single click.</li>
+        </ul>
+    </div>
+
+    <div class="container text-center mb-5">
+        <h2>Get Started Today!</h2>
+        <p>Join RenoBridge and start your renovation journey with confidence. Let us help you create the home of your dreams.</p>
+        <a href="{% url 'register' %}" class="btn btn-primary">Sign Up Now</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
