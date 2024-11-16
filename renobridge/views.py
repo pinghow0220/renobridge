@@ -4,7 +4,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
-from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense, Review
+from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense, Review, ProgressPhoto
 from django.shortcuts import get_object_or_404
 from .forms import ContractorProfileForm, HomeownerForm, ProposalForm, ProcessSelectionForm, ExpenseForm
 from django.core.mail import send_mail
@@ -570,7 +570,8 @@ def upload_project_photo(request, project_id):
 
     if request.method == 'POST' and request.FILES.get('progress_photo'):
         photo = request.FILES['progress_photo']
-        ProjectPhoto.objects.create(project=project, contractor=contractor, photo=photo)
+        # Create a ProgressPhoto instance instead of ProjectPhoto for progress updates
+        ProgressPhoto.objects.create(project=project, photo=photo)
         return redirect('expert_dashboard')
 
     return redirect('expert_dashboard')
@@ -578,8 +579,19 @@ def upload_project_photo(request, project_id):
 @login_required
 def view_project_photos(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
+    
+    # Ensure that only the homeowner of the project can view the progress photos
+    if project.owner.user != request.user:
+        return redirect('dashboard')  # Redirect to a dashboard or 403 page if unauthorized
 
-    return render(request, 'view_project_photos.html', {'project': project})
+    progress_photos = ProgressPhoto.objects.filter(project=project)
+
+    context = {
+        'project': project,
+        'progress_photos': progress_photos,
+    }
+    return render(request, 'view_project_photos.html', context)
+
 
 # View for contractors to update expenses
 def update_expense(request, project_id):
@@ -627,8 +639,15 @@ def dashboard(request):
 
         remaining_duration = max(project.total_duration - project.duration_spent, 0)
 
-        # Redirect to completion page if progress is 100%
+        # Send email notification if progress is 100%
         if project.progress_percentage >= 100:
+            send_mail(
+                subject='Project Completion Notification',
+                message=f'Dear {homeowner.full_name},\n\nYour project "{project}" has been successfully completed. Thank you for your trust in our platform.\n\nBest regards,\nRenoBridge Team',
+                from_email='noreply@renobridge.com',
+                recipient_list=[homeowner.user.email],
+                fail_silently=False,
+            )
             return redirect('completion_page', project_id=project.id)
 
     else:
@@ -644,7 +663,6 @@ def dashboard(request):
     }
 
     return render(request, 'dashboard.html', context)
-
 @login_required
 def completion_page(request, project_id):
     project = get_object_or_404(Project, id=project_id)

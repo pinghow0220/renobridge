@@ -43,9 +43,17 @@ class ProjectPhoto(models.Model):
     project = models.ForeignKey('Project', on_delete=models.CASCADE, null=True, blank=True, related_name='photos')
     photo = models.ImageField(upload_to='project_photos/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return f'Photo for Contractor {self.contractor.user.username}'
+    
+class ProgressPhoto(models.Model):
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='progress_photos')
+    photo = models.ImageField(upload_to='progress_photos/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Progress Photo for Project {self.project.id}'
 
 class CollaborationRequest(models.Model):
     homeowner = models.ForeignKey(Homeowner, on_delete=models.CASCADE)
