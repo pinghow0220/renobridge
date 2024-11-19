@@ -6,7 +6,6 @@ class RenobridgeConfig(AppConfig):
     name = 'renobridge'
 
     def ready(self):
-        # Avoid running during migration commands
         if 'runserver' in sys.argv or 'process_tasks' in sys.argv:
             from background_task.models import Task
             if not Task.objects.filter(task_name='renobridge.tasks.increment_duration_spent').exists():

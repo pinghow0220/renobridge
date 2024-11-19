@@ -27,9 +27,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'expert_invitation_list'%}">Invitation List</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
-          </li>
         </ul>
         {% if user.is_authenticated %}
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -44,10 +41,9 @@
     
     <div class="container mt-5"></div>
         <div class="profile-section d-flex">
-            <!-- Profile Photo Upload -->
+
             <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-              <!-- Logo Upload Section -->
               <div class="me-4">
                   <div class="profile-photo text-center">
                       <label for="uploadLogo" id="photoLabel" class="form-label" style="cursor: pointer;">

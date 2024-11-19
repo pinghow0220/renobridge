@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class CustomUser(AbstractUser):
-    user_type = models.CharField(max_length=20)  # Store userType (e.g., "homeowner", "contractor")
+    user_type = models.CharField(max_length=20) 
 
     def __str__(self):
         return self.username
@@ -19,7 +19,7 @@ class Homeowner(models.Model):
     property_type = models.CharField(max_length=100)
     property_size = models.CharField(max_length=100)
     preferred_style = models.CharField(max_length=100)
-    services_required = models.TextField()  # Store services as comma-separated values
+    services_required = models.TextField()
     budget = models.CharField(max_length=100)
     duration = models.CharField(max_length=100)
     start_date = models.DateField(null=True, blank=True)
@@ -34,8 +34,8 @@ class Contractor(models.Model):
     years_of_experience = models.CharField(max_length=50)
     description = models.TextField()
     preferred_location = models.CharField(max_length=100)
-    services_provided = models.TextField()  # Store services as comma-separated values
-    expertise_styles = models.TextField()  # Store expertise styles as comma-separated values
+    services_provided = models.TextField()
+    expertise_styles = models.TextField()
     average_rating = models.FloatField(default=0.0)
 
 class ProjectPhoto(models.Model):

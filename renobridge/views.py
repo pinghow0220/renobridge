@@ -1,15 +1,13 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser  # Ensure you have a custom user model
 from django.contrib.auth.views import LoginView
-from .models import Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense, Review, ProgressPhoto
+from .models import CustomUser, Homeowner, Contractor, ProjectPhoto, CollaborationRequest, Project, Expense, Review, ProgressPhoto
 from django.shortcuts import get_object_or_404
 from .forms import ContractorProfileForm, HomeownerForm, ProposalForm, ProcessSelectionForm, ExpenseForm
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import HttpResponseForbidden
 from django import forms
 from collections import defaultdict
 from decimal import Decimal
@@ -19,7 +17,6 @@ from django.utils import timezone
 from django.contrib import messages
 from django.db.models import Avg
 from django.db import IntegrityError
-
 
 
 
@@ -40,7 +37,6 @@ def about_us(request):
 
 def expert_list(request):
     try:
-        # Assuming the logged-in user is a homeowner
         homeowner = Homeowner.objects.get(user=request.user)
 
         # Find matching contractors based on homeowner preferences
@@ -70,19 +66,18 @@ def expert_portfolio(request, id):
     # Fetch all uploaded photos by the contractor
     project_photos = ProjectPhoto.objects.filter(contractor=contractor)
 
-    # Fetch reviews for the contractor
     reviews = contractor.reviews.all()
 
     # Calculate the average rating
     avg_rating = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
-    avg_rating = avg_rating if avg_rating is not None else 0  # Default to 0 if no ratings exist
+    avg_rating = avg_rating if avg_rating is not None else 0  
 
     context = {
         'contractor': contractor,
         'project_photos': project_photos,
         'reviews': reviews,
         'avg_rating': avg_rating,
-        'range': range(1, 6)  # Adding a range for the loop (from 1 to 5)
+        'range': range(1, 6) 
     }
 
     return render(request, 'expert_portfolio.html', context)
@@ -240,7 +235,7 @@ def register(request):
         email = request.POST.get('email', '')
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
-        user_type = request.POST.get('userType', '')  # Homeowner or Contractor
+        user_type = request.POST.get('userType', '') 
 
         # Check for missing fields
         if not (username and email and password and confirm_password and user_type):
@@ -263,7 +258,7 @@ def register(request):
         # Try to create a user
         try:
             user = CustomUser.objects.create_user(username=username, email=email, password=password)
-            user.user_type = user_type  # Set user_type
+            user.user_type = user_type 
             user.save()
 
             # Log the user in
@@ -276,7 +271,6 @@ def register(request):
                 return redirect('experts_input')
 
         except IntegrityError:
-            # Handle the case when the username already exists
             return render(request, 'register.html', {
                 'error': 'Username has already been used. Please choose a different one.',
                 'username': username,
@@ -288,10 +282,12 @@ def register(request):
 
     
 class CustomLoginView(LoginView):
+    template_name = 'login.html'
+
     def form_valid(self, form):
         # Log the user in
         auth_login(self.request, form.get_user())
-        
+
         # Redirect based on user type
         user_type = form.get_user().user_type
         if user_type == 'homeowner':
@@ -299,6 +295,20 @@ class CustomLoginView(LoginView):
         elif user_type == 'contractor':
             return redirect('expert_dashboard')
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        # Handle invalid form submission
+        username = self.request.POST.get('username', '').strip()
+        password = self.request.POST.get('password', '').strip()
+
+        # Check if fields are empty
+        if not username or not password:
+            messages.error(self.request, 'Both username and password are required.')
+        else:
+            messages.error(self.request, 'Invalid username or password.')
+
+        # Return the response with errors
+        return self.render_to_response(self.get_context_data(form=form))
 
 @login_required
 def edit_contractor_profile(request, id):
@@ -415,7 +425,7 @@ def suggest_proposal(request, invitation_id):
         invitation.suggested_cost = suggested_cost
         invitation.suggested_duration = suggested_duration
         invitation.suggested_start_date = suggested_start_date
-        invitation.status = "Proposal Sent"  # Update the status to match the homeowner's view
+        invitation.status = "Proposal Sent" 
         invitation.save()
 
         # Send notification email to the homeowner
@@ -459,7 +469,7 @@ def start_project(request, proposal_id):
         contractor = collaboration_request.contractor
         # Ensure this contractor exists in the system and matches the one who logs in later.
         if not Contractor.objects.filter(pk=contractor.pk).exists():
-            return redirect('dashboard')  # Handle error or redirect accordingly
+            return redirect('dashboard') 
 
         # Create project with validated contractor
         project = Project.objects.create(
@@ -570,7 +580,6 @@ def upload_project_photo(request, project_id):
 
     if request.method == 'POST' and request.FILES.get('progress_photo'):
         photo = request.FILES['progress_photo']
-        # Create a ProgressPhoto instance instead of ProjectPhoto for progress updates
         ProgressPhoto.objects.create(project=project, photo=photo)
         return redirect('expert_dashboard')
 
@@ -580,9 +589,8 @@ def upload_project_photo(request, project_id):
 def view_project_photos(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     
-    # Ensure that only the homeowner of the project can view the progress photos
     if project.owner.user != request.user:
-        return redirect('dashboard')  # Redirect to a dashboard or 403 page if unauthorized
+        return redirect('dashboard') 
 
     progress_photos = ProgressPhoto.objects.filter(project=project)
 
@@ -593,19 +601,28 @@ def view_project_photos(request, project_id):
     return render(request, 'view_project_photos.html', context)
 
 
-# View for contractors to update expenses
 def update_expense(request, project_id):
     project = get_object_or_404(Project, id=project_id)
+    
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            expense = form.save(commit=False)
-            expense.project = project
-            expense.save()
-            # Update the project's expenses spent
-            project.expenses_spent += expense.amount
-            project.save()
-            return redirect('expert_dashboard')  # Redirect to a relevant page
+            expense = form.cleaned_data['amount']
+            if expense < 0:
+                # Display error message for negative values
+                messages.error(request, 'Expense amount cannot be negative.')
+            else:
+                expense_instance = form.save(commit=False)
+                expense_instance.project = project
+                expense_instance.save()
+                
+                # Update the project's expenses spent
+                project.expenses_spent += expense_instance.amount
+                project.save()
+                
+                return redirect('expert_dashboard')
+        else:
+            messages.error(request, 'Please enter a valid expense amount.')
 
     else:
         form = ExpenseForm()
@@ -625,9 +642,28 @@ def view_expenses(request, project_id):
     })
 
 @login_required
+def delete_expense(request, project_id, expense_id):
+    project = get_object_or_404(Project, id=project_id)
+    expense = get_object_or_404(Expense, id=expense_id, project=project)
+
+    if request.method == 'POST':
+        # Update the project's expenses_spent before deleting
+        project.expenses_spent -= expense.amount
+        project.save()
+
+        # Delete the expense
+        expense.delete()
+
+        return redirect('view_expenses', project_id=project.id)
+
+    return redirect('view_expenses', project_id=project.id)
+
+@login_required
 def dashboard(request):
     homeowner = get_object_or_404(Homeowner, user=request.user)
-    project = Project.objects.filter(owner=homeowner).first()
+
+    # Filter only ongoing projects for the homeowner
+    project = Project.objects.filter(owner=homeowner, status='In Progress').first()
 
     if project:
         expenses = project.expenses.all()
@@ -639,8 +675,12 @@ def dashboard(request):
 
         remaining_duration = max(project.total_duration - project.duration_spent, 0)
 
-        # Send email notification if progress is 100%
         if project.progress_percentage >= 100:
+            # Mark the project as completed
+            project.status = 'Completed'
+            project.save()
+
+            # Send email notification about project completion
             send_mail(
                 subject='Project Completion Notification',
                 message=f'Dear {homeowner.full_name},\n\nYour project "{project}" has been successfully completed. Thank you for your trust in our platform.\n\nBest regards,\nRenoBridge Team',
@@ -648,21 +688,22 @@ def dashboard(request):
                 recipient_list=[homeowner.user.email],
                 fail_silently=False,
             )
+            # Redirect to the project completion page
             return redirect('completion_page', project_id=project.id)
 
     else:
+        # No ongoing projects, empty state
         categorized_expenses = {}
         remaining_duration = 0
 
-    categorized_expenses = dict(categorized_expenses)
-
     context = {
         'project': project,
-        'categorized_expenses': categorized_expenses,
+        'categorized_expenses': dict(categorized_expenses),
         'remaining_duration': remaining_duration,
     }
 
     return render(request, 'dashboard.html', context)
+
 @login_required
 def completion_page(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -670,8 +711,8 @@ def completion_page(request, project_id):
 
 def download_invoice(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    homeowner = project.owner  # Assuming `Project` has a ForeignKey to `Homeowner`
-    contractor = project.contractor  # Assuming `Project` has a ForeignKey to `Contractor`
+    homeowner = project.owner  
+    contractor = project.contractor  
     expenses = project.expenses.all()
 
     # Create a numbered list for the expenses
@@ -679,7 +720,7 @@ def download_invoice(request, project_id):
     for index, expense in enumerate(expenses, start=1):
         expenses_data.append({
             'no': index,
-            'item': expense.item,  # Assuming you have a field for item name in the expense model
+            'item': expense.item,  
             'category': expense.category,
             'amount': expense.amount,
         })
@@ -694,7 +735,7 @@ def download_invoice(request, project_id):
         'total': sum(Decimal(exp.amount) for exp in expenses),
         'full_name': homeowner.full_name,
         'full_address': homeowner.full_address,
-        'date': timezone.now().strftime('%Y-%m-%d'),  # Current date for invoice
+        'date': timezone.now().strftime('%Y-%m-%d'),  
         'invoice_number': invoice_number,
         'company_name': contractor.company_name,
         'company_address': contractor.company_address,
@@ -736,7 +777,23 @@ def submit_review(request, project_id):
         contractor.average_rating = sum(all_ratings) / len(all_ratings)
         contractor.save()
 
-        messages.success(request, "Thank you for submitting your review!")
-        return redirect('dashboard')
+
+        # Redirect to past project details page
+        return redirect('project_details', project_id=project.id)
 
     return HttpResponse("Invalid request", status=400)
+
+
+@login_required
+def project_details(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    # Fetch any additional related information if needed, e.g., expenses, photos, etc.
+    project_photos = ProjectPhoto.objects.filter(project=project)
+    expenses = project.expenses.all()
+
+    return render(request, 'project_details.html', {
+        'project': project,
+        'project_photos': project_photos,
+        'expenses': expenses
+    })
