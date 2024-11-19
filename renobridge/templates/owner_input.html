@@ -18,13 +18,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'expert_list' %}">Experts</a>
+                <a class="nav-link disabled" href="{% url 'expert_list' %}">Experts</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
+                <a class="nav-link disabled" href="{% url 'dashboard' %}">Dashboard</a>
               </li>
             </ul>
           </div>
@@ -38,13 +35,13 @@
             <form id="ownerInputForm" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 
-                <!-- Full Name -->
+
                 <div class="mb-3 mt-3">
                     <label for="fullName" class="form-label"><b>1. Enter your full name:</b></label>
                     <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter your full name" required>
                 </div>
             
-                <!-- 2. Property Location -->
+
                 <div class="mb-3">
                     <label for="location" class="form-label"><b>2. Select the location of your property:</b></label>
                     <select id="location" class="form-select" name="location">
@@ -69,7 +66,7 @@
                     <textarea id="fullAddress" name="full_address" class="form-control" placeholder="Enter your full property address" required></textarea>
                 </div>
             
-                <!-- 3. Property Type -->
+ 
                 <div class="mb-3">
                     <label for="propertyType" class="form-label"><b>4. Select the type of your property:</b></label>
                     <select id="propertyType" class="form-select" name="propertyType">
@@ -81,7 +78,7 @@
                     </select>
                 </div>
             
-                <!-- 4. Property Size -->
+ 
                 <div class="mb-3">
                     <label for="propertySize" class="form-label"><b>5. Select the range of your property size (sqft):</b></label>
                     <select id="propertySize" class="form-select" name="propertySize">
@@ -94,7 +91,7 @@
                     </select>
                 </div>
             
-                <!-- 5. Preferred Style -->
+
                 <div class="mb-3">
                     <label for="preferredStyle" class="form-label"><b>6. Select the preferred style for your project:</b></label>
                     <select id="preferredStyle" class="form-select" name="preferredStyle">
@@ -107,7 +104,7 @@
                     </select>
                 </div>
             
-                <!-- 6. Services -->
+
                 <div class="mb-3">
                     <label class="form-label"><b>7. Select services you require:</b></label><br>
                     <div class="form-check form-check-inline">
@@ -144,7 +141,7 @@
                     </div>
                 </div>
             
-                <!-- 7. Budget -->
+  
                 <div class="mb-3">
                     <label for="budget" class="form-label"><b>8. Select your budget for your project:</b></label>
                     <select id="budget" class="form-select" name="budget">
@@ -158,7 +155,7 @@
                     </select>
                 </div>
             
-                <!-- 8. Duration -->
+
                 <div class="mb-3">
                     <label for="duration" class="form-label"><b>9. Select your expected duration for your project:</b></label>
                     <select id="duration" class="form-select" name="duration">
@@ -177,13 +174,13 @@
                     <input type="date" id="startDate" name="start_date" class="form-control">
                 </div>
                 
-                <!-- 9. Upload files -->
+
                 <div class="mb-3">
                     <label for="uploadFiles" class="form-label"><b>11. Upload your floor plan, concept drawing, 3D designs if there is any:</b></label>
                     <input type="file" id="uploadFiles" name="floorplan_img" class="form-control">
                 </div>
             
-                <!-- Submit Button -->
+
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             
